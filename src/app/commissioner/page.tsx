@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Bell, CalendarDays, Scale, ShieldCheck, Trophy, Users } from "lucide-react";
