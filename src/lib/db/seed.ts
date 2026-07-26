@@ -1,0 +1,96 @@
+import type { DatabaseSnapshot } from "./schema";
+
+export const db: DatabaseSnapshot = {
+  leagues: [
+    {
+      id: "league_nfl",
+      slug: "national-franchise-league",
+      name: "National Franchise League",
+      logoSrc: "/league-logo.png",
+      description: "The premier Madden franchise football experience.",
+      platform: "PS5",
+      season: 2026,
+      week: 1,
+      commissionerId: "owner_commish",
+      discordUrl: "https://discord.com/",
+      twitchChannel: "nationalfranchiseleague",
+      youtubeChannelUrl: "https://www.youtube.com/@NFL.Madden25",
+      instagramUrl: "https://www.instagram.com/",
+    },
+  ],
+  owners: [
+    { id: "owner_commish", leagueId: "league_nfl", name: "Commissioner Desk", gamertag: "NFLCommish", role: "commissioner", discordHandle: "@commish", twitchChannel: "nationalfranchiseleague", joinedAt: "2026-01-01" },
+    { id: "owner_giants", leagueId: "league_nfl", name: "Big Blue Owner", gamertag: "BigBlueOwner", role: "owner", teamId: "nyg", discordHandle: "@bigblue", twitchChannel: "BigBlueOwner", joinedAt: "2026-01-02" },
+    { id: "owner_cowboys", leagueId: "league_nfl", name: "Dallas Owner", gamertag: "DallasUser", role: "owner", teamId: "dal", discordHandle: "@dallas", joinedAt: "2026-01-02" },
+    { id: "owner_eagles", leagueId: "league_nfl", name: "Philly Owner", gamertag: "BirdGangPS5", role: "owner", teamId: "phi", discordHandle: "@philly", joinedAt: "2026-01-02" },
+    { id: "owner_washington", leagueId: "league_nfl", name: "Washington Owner", gamertag: "DCMadden", role: "committee", teamId: "was", discordHandle: "@washington", joinedAt: "2026-01-02" },
+  ],
+  teams: [
+    { id: "nyg", leagueId: "league_nfl", ownerId: "owner_giants", city: "New York", name: "Giants", fullName: "New York Giants", abbreviation: "NYG", logoSrc: "/teams/giants.png", primaryColor: "#0B5CFF", secondaryColor: "#FFFFFF" },
+    { id: "dal", leagueId: "league_nfl", ownerId: "owner_cowboys", city: "Dallas", name: "Cowboys", fullName: "Dallas Cowboys", abbreviation: "DAL", logoSrc: "/teams/cowboys.png", primaryColor: "#BFC7D5", secondaryColor: "#0B1220" },
+    { id: "phi", leagueId: "league_nfl", ownerId: "owner_eagles", city: "Philadelphia", name: "Eagles", fullName: "Philadelphia Eagles", abbreviation: "PHI", logoSrc: "/teams/eagles.png", primaryColor: "#0B6B57", secondaryColor: "#00A3FF" },
+    { id: "was", leagueId: "league_nfl", ownerId: "owner_washington", city: "Washington", name: "Commanders", fullName: "Washington Commanders", abbreviation: "WAS", logoSrc: "/teams/commanders.png", primaryColor: "#8A1538", secondaryColor: "#FFB612" },
+    { id: "kc", leagueId: "league_nfl", city: "Kansas City", name: "Chiefs", fullName: "Kansas City Chiefs", abbreviation: "KC", logoSrc: "/teams/chiefs.png", primaryColor: "#E31837", secondaryColor: "#FFFFFF" },
+    { id: "lv", leagueId: "league_nfl", city: "Las Vegas", name: "Raiders", fullName: "Las Vegas Raiders", abbreviation: "LV", logoSrc: "/teams/raiders.png", primaryColor: "#A5ACAF", secondaryColor: "#000000" },
+    { id: "buf", leagueId: "league_nfl", city: "Buffalo", name: "Bills", fullName: "Buffalo Bills", abbreviation: "BUF", logoSrc: "/teams/bills.png", primaryColor: "#00338D", secondaryColor: "#C60C30" },
+    { id: "mia", leagueId: "league_nfl", city: "Miami", name: "Dolphins", fullName: "Miami Dolphins", abbreviation: "MIA", logoSrc: "/teams/dolphins.png", primaryColor: "#008E97", secondaryColor: "#FC4C02" },
+  ],
+  games: [
+    { id: "game_1", leagueId: "league_nfl", week: 1, awayTeamId: "dal", homeTeamId: "nyg", status: "scheduled", kickoffAt: "2026-07-08T20:00:00-04:00", streamUrl: "https://www.twitch.tv/nationalfranchiseleague", isGameOfTheWeek: true },
+    { id: "game_2", leagueId: "league_nfl", week: 1, awayTeamId: "phi", homeTeamId: "was", awayScore: 31, homeScore: 28, status: "final", kickoffAt: "2026-07-04T19:30:00-04:00" },
+    { id: "game_3", leagueId: "league_nfl", week: 1, awayTeamId: "buf", homeTeamId: "mia", awayScore: 24, homeScore: 17, status: "final", kickoffAt: "2026-07-05T21:15:00-04:00" },
+    { id: "game_4", leagueId: "league_nfl", week: 1, awayTeamId: "kc", homeTeamId: "lv", awayScore: 35, homeScore: 34, status: "final", kickoffAt: "2026-07-05T22:00:00-04:00" },
+    { id: "game_5", leagueId: "league_nfl", week: 1, awayTeamId: "was", homeTeamId: "nyg", status: "scheduled", kickoffAt: "2026-07-09T19:00:00-04:00" },
+  ],
+  standings: [
+    { id: "st_1", leagueId: "league_nfl", teamId: "nyg", wins: 7, losses: 1, ties: 0, pointsFor: 246, pointsAgainst: 160 },
+    { id: "st_2", leagueId: "league_nfl", teamId: "dal", wins: 6, losses: 2, ties: 0, pointsFor: 231, pointsAgainst: 177 },
+    { id: "st_3", leagueId: "league_nfl", teamId: "phi", wins: 6, losses: 2, ties: 0, pointsFor: 214, pointsAgainst: 183 },
+    { id: "st_4", leagueId: "league_nfl", teamId: "was", wins: 5, losses: 3, ties: 0, pointsFor: 198, pointsAgainst: 180 },
+    { id: "st_5", leagueId: "league_nfl", teamId: "kc", wins: 5, losses: 3, ties: 0, pointsFor: 220, pointsAgainst: 206 },
+    { id: "st_6", leagueId: "league_nfl", teamId: "buf", wins: 5, losses: 3, ties: 0, pointsFor: 203, pointsAgainst: 194 },
+    { id: "st_7", leagueId: "league_nfl", teamId: "lv", wins: 4, losses: 4, ties: 0, pointsFor: 187, pointsAgainst: 189 },
+    { id: "st_8", leagueId: "league_nfl", teamId: "mia", wins: 4, losses: 4, ties: 0, pointsFor: 192, pointsAgainst: 203 },
+  ],
+  trades: [
+    { id: "trade_1", leagueId: "league_nfl", fromTeamId: "dal", toTeamId: "was", summary: "Dallas submitted a 2027 2nd-round pick package for secondary help.", status: "pending", submittedAt: "2026-07-06T12:00:00-04:00" },
+  ],
+  announcements: [
+    { id: "ann_1", leagueId: "league_nfl", title: "Week 1 advance", body: "Advance window closes Wednesday at 9 PM ET.", createdAt: "2026-07-06T09:00:00-04:00" },
+    { id: "ann_2", leagueId: "league_nfl", title: "Trade approvals", body: "Both owners must confirm accepted trades in Discord before committee review.", createdAt: "2026-07-06T10:00:00-04:00" },
+  ],
+  rules: [
+    { id: "rule_1", leagueId: "league_nfl", title: "League Settings", order: 1, body: ["All-Madden.", "7-minute quarters.", "Play cooldown 5.", "Play limit 4."] },
+    { id: "rule_2", leagueId: "league_nfl", title: "Advance Schedule", order: 2, body: ["Advance days are Wednesday and Sunday.", "Advance window is 3-5 PM EST."] },
+  ],
+  hallOfFame: [
+    { id: "hof_1", leagueId: "league_nfl", category: "Champions", title: "Champions", description: "Premium Madden franchise history under the National Franchise League umbrella." },
+    { id: "hof_2", leagueId: "league_nfl", category: "Awards", title: "Award Winners", description: "Season awards, MVPs, and owner achievements." },
+    { id: "hof_3", leagueId: "league_nfl", category: "Records", title: "Record Breakers", description: "League records and historic performances." },
+  ],
+  awards: [
+    { id: "award_1", leagueId: "league_nfl", season: 2026, week: 1, title: "Game of the Week", winner: "New York Giants vs Dallas Cowboys", teamId: "nyg" },
+  ],
+  stats: [
+    { id: "stat_1", leagueId: "league_nfl", teamId: "buf", playerName: "Josh Allen", category: "Passing", value: "2,418 YDS", extra: "28 TD" },
+    { id: "stat_2", leagueId: "league_nfl", teamId: "phi", playerName: "Saquon Barkley", category: "Rushing", value: "1,126 YDS", extra: "14 TD" },
+    { id: "stat_3", leagueId: "league_nfl", teamId: "mia", playerName: "Tyreek Hill", category: "Receiving", value: "982 YDS", extra: "11 TD" },
+    { id: "stat_4", leagueId: "league_nfl", teamId: "dal", playerName: "Micah Parsons", category: "Sacks", value: "13.5", extra: "4 FF" },
+    { id: "stat_5", leagueId: "league_nfl", teamId: "nyg", playerName: "Sauce Gardner", category: "INTs", value: "7", extra: "2 TD" },
+    { id: "stat_6", leagueId: "league_nfl", teamId: "was", playerName: "Bobby Wagner", category: "Tackles", value: "72", extra: "9 TFL" },
+    { id: "stat_7", leagueId: "league_nfl", teamId: "dal", playerName: "DaRon Bland", category: "Def TD", value: "3", extra: "6 INT" },
+  ],
+  powerRankings: [
+    { id: "pr_1", leagueId: "league_nfl", teamId: "nyg", rank: 1, note: "Balanced, ruthless, and playing like a top Madden user team." },
+    { id: "pr_2", leagueId: "league_nfl", teamId: "dal", rank: 2, note: "Explosive offense with a broadcast-game ceiling." },
+    { id: "pr_3", leagueId: "league_nfl", teamId: "phi", rank: 3, note: "Defense and run game are built for playoff Madden." },
+    { id: "pr_4", leagueId: "league_nfl", teamId: "kc", rank: 4, note: "Passing attack can flip any game in one drive." },
+    { id: "pr_5", leagueId: "league_nfl", teamId: "buf", rank: 5, note: "One statement win from a power rankings jump." },
+  ],
+  transactions: [
+    { id: "tx_1", leagueId: "league_nfl", teamId: "nyg", description: "Signed WR depth to the active roster.", createdAt: "2026-07-06T11:00:00-04:00" },
+    { id: "tx_2", leagueId: "league_nfl", teamId: "dal", description: "Traded a 2027 2nd-round pick for secondary help.", createdAt: "2026-07-06T11:15:00-04:00" },
+    { id: "tx_3", leagueId: "league_nfl", teamId: "phi", description: "Placed starting HB on short-term IR.", createdAt: "2026-07-06T11:30:00-04:00" },
+    { id: "tx_4", leagueId: "league_nfl", teamId: "was", description: "Activated rookie linebacker before rivalry week.", createdAt: "2026-07-06T11:45:00-04:00" },
+  ],
+};
