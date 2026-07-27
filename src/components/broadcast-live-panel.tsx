@@ -116,7 +116,6 @@ export function BroadcastPlayer() {
           <div className="relative aspect-[9/16] overflow-hidden rounded-[1.15rem] border border-white/10 bg-black">
             <video
               ref={trailerRef}
-              src="/league-trailer.mov"
               className="absolute inset-0 size-full bg-black object-contain"
               autoPlay
               controls
@@ -125,7 +124,10 @@ export function BroadcastPlayer() {
               playsInline
               preload="metadata"
               aria-label="National Franchise League promotional trailer"
-            />
+            >
+              <source src="/league-trailer.mov" />
+              Your browser cannot play the National Franchise League trailer.
+            </video>
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.18)_0%,transparent_16%,transparent_62%,rgba(255,255,255,0.1)_78%,transparent_100%)]" />
             <div className="pointer-events-none absolute -left-12 top-8 h-64 w-20 rotate-12 rounded-full bg-white/16 blur-xl" />
             <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/15 bg-black/60 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white backdrop-blur">
