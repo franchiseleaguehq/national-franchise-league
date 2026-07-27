@@ -125,7 +125,7 @@ export function BroadcastPlayer() {
               preload="metadata"
               aria-label="National Franchise League promotional trailer"
             >
-              <source src="/league-trailer.mov" />
+              <source src="/league-trailer.mp4" type="video/mp4" />
               Your browser cannot play the National Franchise League trailer.
             </video>
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.18)_0%,transparent_16%,transparent_62%,rgba(255,255,255,0.1)_78%,transparent_100%)]" />
