@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   newOwnerGuide,
+  originalNotionStatements,
   rulebookCategories,
   rulebookMeta,
   rulebookQuickStats,
@@ -158,7 +159,7 @@ export function RulesRulebook() {
 
   const totalRules = rulebookCategories.reduce((total, category) => total + category.rules.length, 0);
   const visibleRules = filteredCategories.reduce((total, category) => total + category.rules.length, 0);
-  const totalStatements = rulebookCategories.reduce((total, category) => total + category.rules.reduce((sum, rule) => sum + rule.content.length, 0), 0);
+  const totalStatements = originalNotionStatements.length;
 
   return (
     <main className="min-h-screen overflow-hidden bg-black text-white">
