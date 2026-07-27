@@ -1,5 +1,5 @@
-const CACHE_NAME = "national-franchise-league-v2";
-const RUNTIME_CACHE = "national-franchise-league-runtime-v2";
+const CACHE_NAME = "national-franchise-league-v3";
+const RUNTIME_CACHE = "national-franchise-league-runtime-v3";
 const CORE_ASSETS = [
   "/",
   "/rules",

@@ -27,22 +27,122 @@ export type RulebookCategory = {
 };
 
 export const rulebookMeta = {
-  version: "v1.0 Official Review",
+  edition: "National Franchise League Official Rulebook — Madden NFL 27 Edition",
+  version: "v1.1 Madden NFL 27 Draft",
   lastUpdated: "July 27, 2026",
-  sourceStatus: "Official rulebook content is embedded in the National Franchise League website for commissioner review before production.",
+  sourceStatus: "Official rulebook content is embedded in the National Franchise League website for commissioner review before production. No Notion dependency is required.",
 };
 
 export const whatsNew = [
   {
-    title: "Full Rulebook Migration",
+    title: "Mobile-First Rulebook Draft",
     date: "July 27, 2026",
-    note: "Current league rules were imported into the website as the permanent official digital rulebook home.",
+    note: "The embedded official rules were reorganized into orientation cards, quick-reference basics, searchable accordion sections, and a no-API rules assistant.",
   },
   {
-    title: "Future Changes",
-    date: "Next approved update",
-    note: "Commissioner-approved rule changes can be added here with a date, version, and summary.",
+    title: "Madden NFL 27 Policy Review",
+    date: "Commissioner approval required",
+    note: "New Madden 27 feature policies are flagged for review where the current written rulebook does not specifically address them.",
   },
+];
+
+export const rookieOrientation = [
+  {
+    title: "Respond and schedule within 10 hours.",
+    summary: "Owners have a 10-hour response window when contacted.",
+    ruleTitle: "🕒 Scheduling & Sim Policy",
+    label: "REQUIRED",
+  },
+  {
+    title: "Do not quit games.",
+    summary: "If you start a game, you must finish it unless a listed exception applies.",
+    ruleTitle: "📖 Part 2 — No Quitting Policy",
+    label: "NOT ALLOWED",
+  },
+  {
+    title: "Respect opponents.",
+    summary: "Trash talk is allowed; personal attacks, harassment, and toxicity are not.",
+    ruleTitle: "\n💪 Part 3 -Sportsmanship & Conduct",
+    label: "REQUIRED",
+  },
+  {
+    title: "Follow the fourth-down rules.",
+    summary: "Fourth-down attempts are restricted by field position, score, and late-game situation.",
+    ruleTitle: "🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules",
+    label: "REQUIRED",
+  },
+  {
+    title: "Follow the two-point-conversion rules.",
+    summary: "Two-point attempts are allowed when needed to tie or win, and losing teams may attempt anytime.",
+    ruleTitle: "🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules",
+    label: "ALLOWED",
+  },
+  {
+    title: "Stream required games.",
+    summary: "Games of the Week and playoff games must be streamed on YouTube or Twitch.",
+    ruleTitle: "📺 Part 6 — Streaming & Game of the Week",
+    label: "REQUIRED",
+  },
+  {
+    title: "Do not stat pad.",
+    summary: "CPU games have stat caps and violations can trigger AWR deductions or suspensions.",
+    ruleTitle: "🤖 Part 7 — CPU Games & Stat Caps",
+    label: "NOT ALLOWED",
+  },
+  {
+    title: "Follow trade and roster rules.",
+    summary: "Trades require committee approval and rosters must meet league structure rules.",
+    ruleTitle: "💰 Part 8 — Salary Cap & Trading Rules",
+    label: "REQUIRED",
+  },
+  {
+    title: "Do not use illegal position substitutions.",
+    summary: "WR to HB/TE, OL to FB/TE, SS/FS to CB/LB, and CB to SS/FS are illegal.",
+    ruleTitle: "🧩 Part 10 — Illegal Subs / Roster Rules / Editing",
+    label: "NOT ALLOWED",
+  },
+  {
+    title: "Play realistic, competitive football.",
+    summary: "Gameplay should emulate real NFL football and avoid exploit mechanics.",
+    ruleTitle: "🧠 Part 11 — Gameplay Conduct",
+    label: "REQUIRED",
+  },
+];
+
+export const leagueBasics = [
+  ["Platform", "PlayStation 5 (Crossplay Enabled)"],
+  ["Difficulty", "All-Madden"],
+  ["Quarter length", "7 Minutes"],
+  ["Advance schedule", "Monday, Wednesday & fridays between 5-6pm"],
+  ["Play cooldown", "5 Plays"],
+  ["Play limit", "4 Plays"],
+  ["Injuries", "On"],
+  ["Fatigue", "On"],
+  ["Progressive fatigue", "On"],
+];
+
+export const madden27ReviewTopics = [
+  ["Persona Engine", "Not specifically covered by the current official rulebook."],
+  ["Emergent Actions", "Not specifically covered by the current official rulebook."],
+  ["Player holdouts", "Not specifically covered by the current official rulebook."],
+  ["Player trade demands", "Not specifically covered by the current official rulebook."],
+  ["No-trade clauses", "Not specifically covered by the current official rulebook."],
+  ["Guaranteed contracts", "Not specifically covered by the current official rulebook."],
+  ["Incentives", "Not specifically covered by the current official rulebook."],
+  ["Void years", "Not specifically covered by the current official rulebook."],
+  ["Franchise tags", "Not specifically covered by the current official rulebook."],
+  ["Transition tags", "Not specifically covered by the current official rulebook."],
+  ["Restricted free agency", "Not specifically covered by the current official rulebook."],
+  ["Free Agent Frenzy", "Current free agency rules apply until the commissioner approves a Madden 27-specific policy."],
+  ["Undrafted rookie free agents", "Not specifically covered by the current official rulebook."],
+  ["Wear and Tear", "Not specifically covered by the current official rulebook."],
+  ["Progressive fatigue", "Current league setting: Progressive Fatigue is On."],
+  ["Dynamic weather", "Current league setting: Weather is Live (Real-World Conditions)."],
+  ["Play-call substitutions", "Current illegal substitution, motion, personnel, and gameplay conduct rules apply."],
+  ["Formation shifts", "Current motion and gameplay conduct rules apply."],
+  ["Coach Mode", "Not specifically covered by the current official rulebook."],
+  ["CPU draft-day trades", "Current trading rule says: No CPU trades."],
+  ["Tiered abilities and stat-padding prevention", "Current CPU stat caps, attribute policy, editing policy, and gameplay conduct rules apply."],
 ];
 
 export const newOwnerGuide = [
@@ -512,7 +612,7 @@ export const rulebookCategories: RulebookCategory[] = [
 export const rulebookQuickStats = [
   ["Version", rulebookMeta.version],
   ["Updated", rulebookMeta.lastUpdated],
-  ["Categories", String(rulebookCategories.length)],
+  ["Sections", "17"],
   ["Official Home", "NFL Website"],
 ];
 
