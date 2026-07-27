@@ -11,10 +11,10 @@ export const nationalFranchiseLeague: MaddenLeague = {
   week: 1,
   rulesPath: "/rules",
   socials: {
-    discord: "https://discord.com/",
+    discord: "https://discord.gg/nationalfranchiseleague",
     twitchChannel: "nationalfranchiseleague",
     youtubeChannel: "https://www.youtube.com/@NFL.Madden25",
-    instagram: "https://www.instagram.com/",
+    instagram: "https://www.instagram.com/nationalfranchiseleague/",
   },
   teams: [
     { id: "nyg", city: "New York", name: "Giants", fullName: "New York Giants", logoSrc: "/teams/giants.png" },

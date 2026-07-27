@@ -12,10 +12,10 @@ export const db: DatabaseSnapshot = {
       season: 2026,
       week: 1,
       commissionerId: "owner_commish",
-      discordUrl: "https://discord.com/",
+      discordUrl: "https://discord.gg/nationalfranchiseleague",
       twitchChannel: "nationalfranchiseleague",
       youtubeChannelUrl: "https://www.youtube.com/@NFL.Madden25",
-      instagramUrl: "https://www.instagram.com/",
+      instagramUrl: "https://www.instagram.com/nationalfranchiseleague/",
     },
   ],
   owners: [
