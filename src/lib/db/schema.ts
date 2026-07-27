@@ -18,19 +18,38 @@ export type LeagueRecord = {
 
 export type OwnerRecord = {
   id: ID;
+  slug: string;
   leagueId: ID;
   name: string;
   gamertag: string;
   role: "commissioner" | "committee" | "owner";
+  status: "active" | "commissioner";
   teamId?: ID;
   discordHandle: string;
+  bio: string;
+  timezone: string;
+  avatarSrc?: string;
+  preferredPlatform: "YouTube" | "Twitch" | "Kick" | "None";
   twitchChannel?: string;
   youtubeUrl?: string;
+  kickUrl?: string;
+  seasonsPlayed: number;
+  careerRecord: string;
+  playoffRecord: string;
+  divisionTitles: number;
+  conferenceChampionships: number;
+  superBowlChampionships: number;
+  currentWinStreak: number;
+  gamesStreamed: number;
+  ownerSince: string;
+  awards: string[];
+  achievementIds: ID[];
   joinedAt: string;
 };
 
 export type TeamRecord = {
   id: ID;
+  slug: string;
   leagueId: ID;
   ownerId?: ID;
   city: string;
@@ -40,6 +59,46 @@ export type TeamRecord = {
   logoSrc: string;
   primaryColor: string;
   secondaryColor: string;
+  isOpen: boolean;
+};
+
+export type OwnerAchievementRecord = {
+  id: ID;
+  label:
+    | "Founding Member"
+    | "Commissioner"
+    | "League Veteran"
+    | "Reliable Owner"
+    | "Broadcaster"
+    | "Good Sportsmanship"
+    | "Division Champion"
+    | "Conference Champion"
+    | "Super Bowl Champion"
+    | "Ironman"
+    | "Dynasty"
+    | "Hall of Fame";
+  description: string;
+};
+
+export type ApplicationRecord = {
+  id: ID;
+  leagueId: ID;
+  fullName: string;
+  gamertag: string;
+  email: string;
+  phone?: string;
+  timezone: string;
+  preferredTeamId: ID;
+  backupTeamChoices: string;
+  maddenLeagueExperience: string;
+  availability: string;
+  youtubeUrl?: string;
+  twitchChannel?: string;
+  kickUrl?: string;
+  whyJoin: string;
+  readRules: boolean;
+  status: "new" | "reviewing" | "accepted" | "declined";
+  submittedAt: string;
 };
 
 export type GameRecord = {
@@ -142,6 +201,8 @@ export type DatabaseSnapshot = {
   leagues: LeagueRecord[];
   owners: OwnerRecord[];
   teams: TeamRecord[];
+  ownerAchievements: OwnerAchievementRecord[];
+  applications: ApplicationRecord[];
   games: GameRecord[];
   standings: StandingRecord[];
   trades: TradeRecord[];

@@ -4,6 +4,7 @@ import { Bell, CalendarDays, Scale, ShieldCheck, Trophy, Users } from "lucide-re
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSession } from "@/lib/auth/session";
+import { listRuntimeApplications } from "@/lib/db/applications";
 import { getCommissionerDashboardData } from "@/lib/db/repositories";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
@@ -20,6 +21,7 @@ export default async function CommissionerDashboardPage() {
   if (!session) redirect("/commissioner/login");
 
   const data = getCommissionerDashboardData();
+  const runtimeApplications = listRuntimeApplications();
 
   return (
     <main className="min-h-screen bg-black px-5 py-10 text-white md:px-8">
@@ -40,9 +42,9 @@ export default async function CommissionerDashboardPage() {
 
         <section className="mt-8 grid gap-4 md:grid-cols-4">
           <StatCard label="Owners" value={data.owners.length} />
-          <StatCard label="Games" value={data.games.length} />
+          <StatCard label="Teams" value={data.teams.length} />
           <StatCard label="Pending Trades" value={data.pendingTrades.length} />
-          <StatCard label="Rule Sections" value={data.rules.length} />
+          <StatCard label="Applications" value={data.applications.length + runtimeApplications.length} />
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -74,7 +76,7 @@ export default async function CommissionerDashboardPage() {
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Users className="text-electric" /> Owners</h2>
             <div className="mt-4 max-h-80 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {data.owners.map((owner) => (
-                <Link key={owner.id} href={`/owners/${owner.id}`} className="block rounded-md border border-white/10 bg-black/35 p-3 transition hover:border-electric/60 hover:text-white">
+                <Link key={owner.id} href={`/owners/${owner.slug}`} className="block rounded-md border border-white/10 bg-black/35 p-3 transition hover:border-electric/60 hover:text-white">
                   <span className="font-bold text-white">{owner.name}</span>
                   <span className="ml-2 text-sm text-chrome-300">{owner.gamertag}</span>
                 </Link>
@@ -91,6 +93,46 @@ export default async function CommissionerDashboardPage() {
                   <p className="mt-1 text-chrome-100">{game.awayTeamId.toUpperCase()} at {game.homeTeamId.toUpperCase()}</p>
                 </div>
               ))}
+            </div>
+          </article>
+
+          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+            <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ShieldCheck className="text-electric" /> Owner Portal Controls</h2>
+            <p className="mt-3 text-sm leading-6 text-chrome-300">
+              Draft editing method: commissioner updates the structured owner records in the local seed data until persistent database editing is approved. These controls identify every editable field without exposing public write access.
+            </p>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {[
+                ["Assign owner to team", "Set team.ownerId and owner.teamId."],
+                ["Edit owner details", "Update name, gamertag, bio, timezone, owner since, and profile photo."],
+                ["Add streaming links", "Set YouTube, Twitch, Kick, and preferred broadcast platform."],
+                ["Update career numbers", "Edit seasons, career record, playoff record, titles, streaks, and streamed games."],
+                ["Assign achievement badges", "Add supported badge IDs to owner achievementIds."],
+                ["Mark team open", "Remove ownerId and set isOpen to true."],
+              ].map(([title, note]) => (
+                <div key={title} className="rounded-md border border-white/10 bg-black/35 p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{title}</p>
+                  <p className="mt-2 text-sm leading-6 text-chrome-300">{note}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+            <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Bell className="text-electric" /> Application Inbox</h2>
+            <p className="mt-3 text-sm leading-6 text-chrome-300">
+              Runtime application submissions are private to the server process in this draft. Connect a persistent database or email workflow before production approval if permanent storage is required.
+            </p>
+            <div className="mt-4 grid gap-2">
+              {runtimeApplications.length > 0 ? runtimeApplications.map((application) => (
+                <div key={application.id} className="rounded-md border border-white/10 bg-black/35 p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{application.status}</p>
+                  <p className="mt-2 font-bold text-white">{application.fullName} | {application.gamertag}</p>
+                  <p className="mt-1 text-sm text-chrome-300">{application.email}</p>
+                </div>
+              )) : (
+                <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No runtime applications submitted in this server session.</div>
+              )}
             </div>
           </article>
         </section>

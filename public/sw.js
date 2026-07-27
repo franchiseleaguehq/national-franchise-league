@@ -1,8 +1,10 @@
-const CACHE_NAME = "national-franchise-league-v3";
-const RUNTIME_CACHE = "national-franchise-league-runtime-v3";
+const CACHE_NAME = "national-franchise-league-v4";
+const RUNTIME_CACHE = "national-franchise-league-runtime-v4";
 const CORE_ASSETS = [
   "/",
   "/rules",
+  "/owners",
+  "/apply",
   "/teams/nyg",
   "/commissioner",
   "/league-logo.png",
