@@ -4,8 +4,8 @@ import { Bell, CalendarDays, Scale, ShieldCheck, Trophy, Users } from "lucide-re
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSession } from "@/lib/auth/session";
-import { listRuntimeApplications } from "@/lib/db/applications";
-import { getCommissionerDashboardData } from "@/lib/db/repositories";
+import { applicationStatusLabel, getCommissionerDashboardData } from "@/lib/db/repositories";
+import { OwnerWorkflowPanel } from "./owner-workflow-panel";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -21,7 +21,7 @@ export default async function CommissionerDashboardPage() {
   if (!session) redirect("/commissioner/login");
 
   const data = getCommissionerDashboardData();
-  const runtimeApplications = listRuntimeApplications();
+  const formerOwner = data.owners.find((owner) => owner.status === "former");
 
   return (
     <main className="min-h-screen bg-black px-5 py-10 text-white md:px-8">
@@ -44,7 +44,7 @@ export default async function CommissionerDashboardPage() {
           <StatCard label="Owners" value={data.owners.length} />
           <StatCard label="Teams" value={data.teams.length} />
           <StatCard label="Pending Trades" value={data.pendingTrades.length} />
-          <StatCard label="Applications" value={data.applications.length + runtimeApplications.length} />
+          <StatCard label="Applications" value={data.applications.length} />
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -99,16 +99,16 @@ export default async function CommissionerDashboardPage() {
           <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ShieldCheck className="text-electric" /> Owner Portal Controls</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
-              Draft editing method: commissioner updates the structured owner records in the local seed data until persistent database editing is approved. These controls identify every editable field without exposing public write access.
+              Commissioner-only controls define who can access active-owner tools and which information stays official league data. Public users cannot edit profiles, approve applications, assign teams, or change records.
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {[
-                ["Assign owner to team", "Set team.ownerId and owner.teamId."],
-                ["Edit owner details", "Update name, gamertag, bio, timezone, owner since, and profile photo."],
-                ["Add streaming links", "Set YouTube, Twitch, Kick, and preferred broadcast platform."],
-                ["Update career numbers", "Edit seasons, career record, playoff record, titles, streaks, and streamed games."],
-                ["Assign achievement badges", "Add supported badge IDs to owner achievementIds."],
-                ["Mark team open", "Remove ownerId and set isOpen to true."],
+                ["View all applications", "Review private application details inside this protected hub only."],
+                ["Approve or reject", "Move applications through commissioner-controlled statuses."],
+                ["Assign owner to team", "Activate access only after approval and team assignment."],
+                ["Mark team open", "Release an owner while preserving permanent profile history."],
+                ["Suspend or restore access", "Change owner access without deleting records."],
+                ["Official records", "Update career numbers, awards, Hall of Fame status, badges, and notes."],
               ].map(([title, note]) => (
                 <div key={title} className="rounded-md border border-white/10 bg-black/35 p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{title}</p>
@@ -121,19 +121,36 @@ export default async function CommissionerDashboardPage() {
           <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Bell className="text-electric" /> Application Inbox</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
-              Runtime application submissions are private to the server process in this draft. Connect a persistent database or email workflow before production approval if permanent storage is required.
+              Applications are private to the commissioner area. Submitted applications remain pending until the commissioner reviews them; approval alone does not assign a team.
             </p>
             <div className="mt-4 grid gap-2">
-              {runtimeApplications.length > 0 ? runtimeApplications.map((application) => (
+              {data.applications.length > 0 ? data.applications.map((application) => (
                 <div key={application.id} className="rounded-md border border-white/10 bg-black/35 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{application.status}</p>
-                  <p className="mt-2 font-bold text-white">{application.fullName} | {application.gamertag}</p>
-                  <p className="mt-1 text-sm text-chrome-300">{application.email}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{applicationStatusLabel(application.status)}</p>
+                  <p className="mt-2 font-bold text-white">{application.preferredDisplayName} | {application.gamertag}</p>
+                  <p className="mt-1 text-sm text-chrome-300">{application.fullName} | {application.email}</p>
+                  <p className="mt-1 text-sm text-chrome-300">Preferred team: {data.teams.find((team) => team.id === application.preferredTeamId)?.fullName ?? application.preferredTeamId}</p>
+                  <p className="mt-2 text-sm leading-6 text-chrome-400">{application.reviewerNote ?? application.whyJoin}</p>
                 </div>
               )) : (
-                <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No runtime applications submitted in this server session.</div>
+                <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No applications submitted in this server session.</div>
               )}
             </div>
+          </article>
+
+          <article className="lg:col-span-2">
+            <OwnerWorkflowPanel
+              applications={data.applications.map((application) => ({
+                id: application.id,
+                preferredDisplayName: application.preferredDisplayName,
+                gamertag: application.gamertag,
+                email: application.email,
+                preferredTeamId: application.preferredTeamId,
+                status: application.status,
+              }))}
+              teams={data.teams.map((team) => ({ id: team.id, fullName: team.fullName, isOpen: team.isOpen }))}
+              formerOwner={formerOwner ? { id: formerOwner.id, name: formerOwner.name, slug: formerOwner.slug, status: formerOwner.status, teamId: formerOwner.teamId, pastTeamIds: formerOwner.pastTeamIds } : undefined}
+            />
           </article>
         </section>
 

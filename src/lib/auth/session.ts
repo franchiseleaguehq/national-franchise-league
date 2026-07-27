@@ -42,7 +42,7 @@ export async function setCommissionerSession(subject = "commissioner") {
   store.set(cookieName, createSessionValue(subject), {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.VERCEL_ENV === "production",
     path: "/",
     maxAge: 60 * 60 * 8,
   });

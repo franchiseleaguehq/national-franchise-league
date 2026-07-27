@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Award, CalendarDays, Clock, Gamepad2, Radio, Shield, Trophy, UserRound, Youtube } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getOwnerPortalProfile, getOwnerStats, listOwnerProfileSlugs } from "@/lib/db/repositories";
+import { getOwnerPortalProfile, getOwnerProfile, getOwnerStats, listOwnerProfileSlugs, ownerStatusLabel } from "@/lib/db/repositories";
 import type { LucideIcon } from "lucide-react";
 
 type StreamingLink = [label: string, href: string, Icon: LucideIcon];
@@ -42,6 +42,7 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
   if (!profile) notFound();
 
   const { team, owner, achievements } = profile;
+  const permanentProfile = owner ? getOwnerProfile(owner.id) : null;
   const stats = getOwnerStats(owner, team);
   const isOpen = !owner;
   const streamingLinks: StreamingLink[] = [];
@@ -87,7 +88,7 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
           <div className="mt-5 grid gap-3">
             <div className="rounded-md border border-white/10 bg-black/35 p-3">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Status</p>
-              <p className="mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">{isOpen ? "Open Team" : owner.status === "commissioner" ? "Commissioner" : "Active"}</p>
+              <p className="mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">{ownerStatusLabel(owner?.status, owner?.role)}</p>
             </div>
             <div className="rounded-md border border-white/10 bg-black/35 p-3">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Time Zone</p>
@@ -123,6 +124,28 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
               {owner?.bio ?? "This team is currently open. Apply for this team to join the National Franchise League owner community."}
             </p>
           </article>
+
+          {owner ? (
+            <article className="rounded-md border border-white/12 bg-black/62 p-5 shadow-chrome">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-electric">
+                <Shield className="size-4" />
+                Current League Status
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-chrome-400">Membership</p>
+                  <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{ownerStatusLabel(owner.status, owner.role)}</p>
+                </div>
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-chrome-400">Hall of Fame</p>
+                  <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{owner.hallOfFame ? "Yes" : "No"}</p>
+                </div>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-chrome-300">
+                Owner profiles are permanent. If an owner leaves, the team can be opened while awards, past teams, seasons, and records remain attached to this stable owner profile.
+              </p>
+            </article>
+          ) : null}
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {stats.map(([label, value]) => (
@@ -168,6 +191,22 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
                 <p className="mt-1 text-sm font-bold text-white">{owner?.awards.length ? owner.awards.join(", ") : "None assigned"}</p>
               </div>
             </div>
+            {owner && permanentProfile ? (
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Past Teams</p>
+                  <p className="mt-1 text-sm font-bold text-white">
+                    {permanentProfile.pastTeams.length ? permanentProfile.pastTeams.map((pastTeam) => pastTeam?.fullName).join(", ") : "None"}
+                  </p>
+                </div>
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Season History</p>
+                  <p className="mt-1 text-sm font-bold text-white">
+                    {permanentProfile.seasonHistory.length ? permanentProfile.seasonHistory.map((history) => `${history.season}: ${history.record}`).join(", ") : "Current season pending"}
+                  </p>
+                </div>
+              </div>
+            ) : null}
           </article>
         </div>
       </section>

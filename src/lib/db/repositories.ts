@@ -1,5 +1,6 @@
 import { db } from "./seed";
-import type { OwnerRecord, TeamRecord } from "./schema";
+import { listRuntimeApplications } from "./applications";
+import type { ApplicationStatus, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
 
 const leagueId = "league_nfl";
 
@@ -65,14 +66,18 @@ export function getHomeData() {
 
 export function getCommissionerDashboardData() {
   const league = getLeague();
+  const applications = [...listRuntimeApplications(), ...db.applications.filter((application) => application.leagueId === league.id)];
   return {
     league,
     pendingTrades: db.trades.filter((trade) => trade.leagueId === league.id && trade.status === "pending"),
     announcements: db.announcements.filter((item) => item.leagueId === league.id),
     owners: db.owners.filter((owner) => owner.leagueId === league.id),
     teams: db.teams.filter((team) => team.leagueId === league.id),
-    applications: db.applications.filter((application) => application.leagueId === league.id),
+    applications,
     achievements: db.ownerAchievements,
+    memberships: db.ownerMemberships.filter((membership) => membership.leagueId === league.id),
+    assignments: db.ownerTeamAssignments.filter((assignment) => assignment.leagueId === league.id),
+    ownerSeasonHistory: db.ownerSeasonHistory.filter((history) => history.leagueId === league.id),
     games: db.games.filter((game) => game.leagueId === league.id),
     rules: db.rules.filter((rule) => rule.leagueId === league.id).sort((a, b) => a.order - b.order),
   };
@@ -84,6 +89,9 @@ export function getOwnerProfile(ownerId: string) {
   return {
     owner,
     team: owner.teamId ? db.teams.find((team) => team.id === owner.teamId) : undefined,
+    pastTeams: owner.pastTeamIds.map((teamId) => db.teams.find((team) => team.id === teamId)).filter(Boolean),
+    assignments: db.ownerTeamAssignments.filter((assignment) => assignment.ownerId === owner.id),
+    seasonHistory: db.ownerSeasonHistory.filter((history) => history.ownerId === owner.id),
     games: db.games.filter((game) => game.homeTeamId === owner.teamId || game.awayTeamId === owner.teamId),
     achievements: db.ownerAchievements.filter((achievement) => owner.achievementIds.includes(achievement.id)),
   };
@@ -108,6 +116,16 @@ export function getOwnerDirectory() {
 }
 
 export function getOwnerPortalProfile(slug: string) {
+  const permanentOwner = db.owners.find((owner) => owner.slug === slug || owner.id === slug);
+  if (permanentOwner && !permanentOwner.teamId) {
+    return {
+      team: permanentOwner.pastTeamIds[0] ? db.teams.find((team) => team.id === permanentOwner.pastTeamIds[0]) ?? db.teams[0] : db.teams[0],
+      owner: permanentOwner,
+      achievements: db.ownerAchievements.filter((achievement) => permanentOwner.achievementIds.includes(achievement.id)),
+      profileSlug: permanentOwner.slug,
+    };
+  }
+
   const directory = getOwnerDirectory();
   const activeProfile = directory.find((item) => item.owner?.slug === slug || item.owner?.id === slug);
   if (activeProfile) return activeProfile;
@@ -116,7 +134,9 @@ export function getOwnerPortalProfile(slug: string) {
 }
 
 export function listOwnerProfileSlugs() {
-  return getOwnerDirectory().map((entry) => entry.profileSlug);
+  const directorySlugs = getOwnerDirectory().map((entry) => entry.profileSlug);
+  const historicalSlugs = db.owners.filter((owner) => !owner.teamId).map((owner) => owner.slug);
+  return [...new Set([...directorySlugs, ...historicalSlugs])];
 }
 
 export function getApplicationTeams() {
@@ -125,6 +145,58 @@ export function getApplicationTeams() {
     label: team.fullName,
     isOpen: !owner,
   }));
+}
+
+export function ownerStatusLabel(status?: OwnerLeagueStatus, role?: string) {
+  if (!status) return "Open Team";
+  if (status === "commissioner" || role === "commissioner") return "Commissioner";
+  const labels: Record<OwnerLeagueStatus, string> = {
+    active: "Active Owner",
+    commissioner: "Commissioner",
+    open: "Open Team",
+    inactive: "Inactive",
+    former: "Former Owner",
+    suspended: "Suspended",
+    banned: "Banned",
+  };
+  return labels[status];
+}
+
+export function applicationStatusLabel(status: ApplicationStatus) {
+  const labels: Record<ApplicationStatus, string> = {
+    draft: "Draft",
+    submitted: "Submitted",
+    pending_commissioner_review: "Pending Commissioner Review",
+    more_information_requested: "More Information Requested",
+    approved: "Approved",
+    approved_awaiting_team_assignment: "Approved - Awaiting Team Assignment",
+    rejected: "Rejected",
+    withdrawn: "Withdrawn",
+  };
+  return labels[status];
+}
+
+export function getPermanentOwnerProfile(ownerId: string) {
+  const profile = getOwnerProfile(ownerId);
+  if (!profile) return null;
+
+  return {
+    ...profile,
+    currentMembership: db.ownerMemberships.find((membership) => membership.ownerId === profile.owner.id),
+    protectedFields: [
+      "Team assignment",
+      "League status",
+      "Career record",
+      "Playoff record",
+      "Championships",
+      "Awards",
+      "Achievement badges",
+      "Hall of Fame status",
+      "Disciplinary history",
+      "Official league statistics",
+      "Commissioner notes",
+    ],
+  };
 }
 
 export function getOwnerStats(owner?: OwnerRecord, team?: TeamRecord) {

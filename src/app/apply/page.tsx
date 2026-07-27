@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ClipboardList, FileText, ShieldCheck, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,9 @@ export default function ApplyPage() {
           </p>
         </aside>
         <article className="rounded-md border border-white/12 bg-black/62 p-5 shadow-chrome">
-          <ApplicationForm teams={teams} />
+          <Suspense fallback={<div className="rounded-md border border-white/10 bg-white/[0.05] p-4 text-sm text-chrome-300">Loading application form...</div>}>
+            <ApplicationForm teams={teams} />
+          </Suspense>
         </article>
       </section>
     </main>

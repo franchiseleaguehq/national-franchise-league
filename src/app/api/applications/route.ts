@@ -10,17 +10,18 @@ function readString(formData: FormData, key: string) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const requiredFields = ["fullName", "gamertag", "email", "timezone", "preferredTeamId", "backupTeamChoices", "maddenLeagueExperience", "availability", "whyJoin"];
+  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "preferredTeamId", "backupTeamChoices", "maddenLeagueExperience", "availability", "whyJoin"];
   const missingFields = requiredFields.filter((field) => !readString(formData, field));
-  const readRules = formData.get("readRules") === "on";
+  const readOrientation = formData.get("readOrientation") === "on";
+  const agreeRulebook = formData.get("agreeRulebook") === "on";
   const teams = getApplicationTeams();
   const preferredTeamId = readString(formData, "preferredTeamId");
 
-  if (missingFields.length > 0 || !readRules) {
+  if (missingFields.length > 0 || !readOrientation || !agreeRulebook) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Please complete every required field and confirm you read the Rookie Orientation and Official Rulebook.",
+        message: "Please complete every required field, confirm you read the Rookie Orientation, and agree to the Official Rulebook.",
         missingFields,
       },
       { status: 400 },
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
     id: `application_${Date.now()}`,
     leagueId: league.id,
     fullName: readString(formData, "fullName"),
+    preferredDisplayName: readString(formData, "preferredDisplayName"),
     gamertag: readString(formData, "gamertag"),
     email: readString(formData, "email"),
     phone: readString(formData, "phone") || undefined,
@@ -47,15 +49,18 @@ export async function POST(request: Request) {
     youtubeUrl: readString(formData, "youtubeUrl") || undefined,
     twitchChannel: readString(formData, "twitchChannel") || undefined,
     kickUrl: readString(formData, "kickUrl") || undefined,
+    preferredPlatform: (readString(formData, "preferredPlatform") || "None") as "YouTube" | "Twitch" | "Kick" | "None",
     whyJoin: readString(formData, "whyJoin"),
-    readRules,
-    status: "new",
+    readOrientation,
+    agreeRulebook,
+    status: "pending_commissioner_review",
     submittedAt: new Date().toISOString(),
   });
 
   return NextResponse.json({
     ok: true,
     applicationId: application.id,
-    message: "Application received. The commissioner team can review it in the owner portal workflow.",
+    status: "Pending Commissioner Review",
+    message: "Your application has been submitted and is awaiting commissioner approval.",
   });
 }

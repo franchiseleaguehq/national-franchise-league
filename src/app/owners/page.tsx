@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Radio, Shield, Trophy, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getOwnerDirectory } from "@/lib/db/repositories";
+import { getOwnerDirectory, ownerStatusLabel } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
   title: "Owner Portal | National Franchise League",
@@ -20,12 +20,6 @@ function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation
       {abbreviation}
     </div>
   );
-}
-
-function statusLabel(owner?: { status: string; role: string }) {
-  if (!owner) return "Open Team";
-  if (owner.status === "commissioner" || owner.role === "commissioner") return "Commissioner";
-  return "Active";
 }
 
 export default function OwnersPage() {
@@ -89,10 +83,24 @@ export default function OwnersPage() {
                 <div className="flex items-start gap-4">
                   <TeamMark abbreviation={team.abbreviation} primaryColor={team.primaryColor} secondaryColor={team.secondaryColor} />
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-electric">{statusLabel(owner)}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-electric">{ownerStatusLabel(owner?.status, owner?.role)}</p>
                     <h3 className="mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase leading-none text-white">{team.fullName}</h3>
                     <p className="mt-2 text-sm font-semibold text-chrome-300">{owner?.name ?? "Open Team"}</p>
                     <p className="text-sm text-chrome-400">{owner?.gamertag ?? "Apply for this team"}</p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center gap-3 rounded-md border border-white/10 bg-black/35 p-3">
+                  <Image
+                    src={owner?.avatarSrc ?? "/league-logo.png"}
+                    alt={owner ? `${owner.name} profile avatar` : "Default National Franchise League avatar"}
+                    width={52}
+                    height={52}
+                    className="size-12 rounded-md object-contain"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Profile</p>
+                    <p className="truncate text-sm font-bold text-white">{owner?.name ?? "No owner assigned"}</p>
                   </div>
                 </div>
 

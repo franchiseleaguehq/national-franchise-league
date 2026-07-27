@@ -1,8 +1,9 @@
-const CACHE_NAME = "national-franchise-league-v4";
-const RUNTIME_CACHE = "national-franchise-league-runtime-v4";
+const CACHE_NAME = "national-franchise-league-v5";
+const RUNTIME_CACHE = "national-franchise-league-runtime-v5";
 const CORE_ASSETS = [
   "/",
   "/rules",
+  "/owner-portal",
   "/owners",
   "/apply",
   "/teams/nyg",

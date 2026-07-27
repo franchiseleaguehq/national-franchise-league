@@ -1,5 +1,17 @@
 export type ID = string;
 
+export type OwnerLeagueStatus = "active" | "commissioner" | "open" | "inactive" | "former" | "suspended" | "banned";
+
+export type ApplicationStatus =
+  | "draft"
+  | "submitted"
+  | "pending_commissioner_review"
+  | "more_information_requested"
+  | "approved"
+  | "approved_awaiting_team_assignment"
+  | "rejected"
+  | "withdrawn";
+
 export type LeagueRecord = {
   id: ID;
   slug: string;
@@ -23,8 +35,9 @@ export type OwnerRecord = {
   name: string;
   gamertag: string;
   role: "commissioner" | "committee" | "owner";
-  status: "active" | "commissioner";
+  status: OwnerLeagueStatus;
   teamId?: ID;
+  pastTeamIds: ID[];
   discordHandle: string;
   bio: string;
   timezone: string;
@@ -44,6 +57,9 @@ export type OwnerRecord = {
   ownerSince: string;
   awards: string[];
   achievementIds: ID[];
+  hallOfFame: boolean;
+  accessSuspended: boolean;
+  commissionerNotes?: string;
   joinedAt: string;
 };
 
@@ -84,6 +100,7 @@ export type ApplicationRecord = {
   id: ID;
   leagueId: ID;
   fullName: string;
+  preferredDisplayName: string;
   gamertag: string;
   email: string;
   phone?: string;
@@ -95,10 +112,47 @@ export type ApplicationRecord = {
   youtubeUrl?: string;
   twitchChannel?: string;
   kickUrl?: string;
+  preferredPlatform: "YouTube" | "Twitch" | "Kick" | "None";
   whyJoin: string;
-  readRules: boolean;
-  status: "new" | "reviewing" | "accepted" | "declined";
+  readOrientation: boolean;
+  agreeRulebook: boolean;
+  status: ApplicationStatus;
+  assignedTeamId?: ID;
+  reviewerNote?: string;
   submittedAt: string;
+};
+
+export type OwnerMembershipRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  status: OwnerLeagueStatus;
+  activeTeamId?: ID;
+  accessLevel: "owner" | "commissioner" | "none";
+  activatedAt?: string;
+  endedAt?: string;
+};
+
+export type OwnerTeamAssignmentRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  teamId: ID;
+  season: number;
+  startedAt: string;
+  endedAt?: string;
+  status: "current" | "released" | "former";
+};
+
+export type OwnerSeasonHistoryRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  season: number;
+  teamId?: ID;
+  record: string;
+  playoffRecord: string;
+  notes: string;
 };
 
 export type GameRecord = {
@@ -203,6 +257,9 @@ export type DatabaseSnapshot = {
   teams: TeamRecord[];
   ownerAchievements: OwnerAchievementRecord[];
   applications: ApplicationRecord[];
+  ownerMemberships: OwnerMembershipRecord[];
+  ownerTeamAssignments: OwnerTeamAssignmentRecord[];
+  ownerSeasonHistory: OwnerSeasonHistoryRecord[];
   games: GameRecord[];
   standings: StandingRecord[];
   trades: TradeRecord[];

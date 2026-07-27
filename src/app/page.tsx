@@ -322,37 +322,6 @@ function PremiumButton({ href, icon: Icon, children, variant = "chrome", tone = 
   );
 }
 
-function OwnerPortalMenu() {
-  return (
-    <details className="group relative">
-      <summary className="inline-flex min-h-14 w-full cursor-pointer list-none items-center justify-center gap-2 rounded-md bg-electric px-4 py-2 text-sm font-semibold text-black shadow-electric transition-all hover:bg-electric-light sm:h-16 sm:px-6 sm:text-base [&::-webkit-details-marker]:hidden">
-        <Users className="size-5" />
-        Owner Portal
-        <ChevronRight className="ml-auto size-4 transition group-open:rotate-90" />
-      </summary>
-      <div className="absolute inset-x-0 top-[calc(100%+0.5rem)] z-40 overflow-hidden rounded-md border border-white/15 bg-black/92 shadow-[0_24px_80px_rgba(0,0,0,0.72)] backdrop-blur-xl">
-        <div className="grid gap-3 p-3">
-          <div className="rounded-md border border-white/10 bg-white/[0.05] p-3">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">Existing Owner</p>
-            <div className="mt-3 grid gap-2">
-              <Link href="/owners" className="rounded-md border border-white/10 bg-black/45 px-3 py-2 text-sm font-bold text-white transition hover:border-electric/55">View Owners</Link>
-              <span className="rounded-md border border-white/10 bg-black/35 px-3 py-2 text-sm font-bold text-chrome-400">Sign In - Coming Soon</span>
-            </div>
-          </div>
-          <div className="rounded-md border border-white/10 bg-white/[0.05] p-3">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">New Owner</p>
-            <div className="mt-3 grid gap-2">
-              <Link href="/apply" className="rounded-md border border-white/10 bg-black/45 px-3 py-2 text-sm font-bold text-white transition hover:border-electric/55">Apply to Join</Link>
-              <Link href="/owners#open-teams" className="rounded-md border border-white/10 bg-black/45 px-3 py-2 text-sm font-bold text-white transition hover:border-electric/55">View Open Teams</Link>
-              <Link href="/rules#orientation" className="rounded-md border border-white/10 bg-black/45 px-3 py-2 text-sm font-bold text-white transition hover:border-electric/55">Read Rookie Orientation</Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-  );
-}
-
 function SectionHeader({ eyebrow, title, icon: Icon }: { eyebrow: string; title: string; icon: LucideIcon }) {
   return (
     <div className="mb-6 flex items-end justify-between gap-4">
@@ -578,7 +547,7 @@ export default function Home() {
             <div className="mt-6 grid max-w-2xl gap-3 sm:grid-cols-3">
               <PremiumButton href="/schedule" icon={CalendarDays} variant="electric">View Schedule</PremiumButton>
               <PremiumButton href="/rules" icon={FileText}>League Rules</PremiumButton>
-              <OwnerPortalMenu />
+              <PremiumButton href="/owner-portal" icon={Users} variant="electric">Owner Portal</PremiumButton>
             </div>
           </div>
 
