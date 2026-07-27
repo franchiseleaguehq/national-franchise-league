@@ -489,7 +489,7 @@ export default function Home() {
         <div className="light-sweep absolute left-[-18%] top-0 h-full w-1/3 animate-[float_9s_ease-in-out_infinite] opacity-55" />
 
         <div className="relative z-10 mx-auto grid h-[calc(100svh-6rem)] max-w-7xl items-center gap-6 px-5 py-4 md:px-8 xl:grid-cols-[0.76fr_1.24fr]">
-          <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
+          <div className="order-2 animate-in fade-in slide-in-from-bottom-6 duration-700 xl:order-1">
             <div className="mb-4 flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-electric/40 bg-electric/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-electric shadow-electric backdrop-blur">Season Trailer</span>
               <span className="rounded-full border border-white/15 bg-black/45 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white backdrop-blur">Madden PS5 Network</span>
@@ -520,7 +520,9 @@ export default function Home() {
             </div>
           </div>
 
-          <BroadcastPlayer />
+          <div className="order-1 xl:order-2">
+            <BroadcastPlayer />
+          </div>
         </div>
       </section>
 
