@@ -383,7 +383,7 @@ export function RulesRulebook() {
               <section id="whats-new" className="mt-6 scroll-mt-32 rounded-md border border-white/12 bg-black/55 p-5 shadow-chrome backdrop-blur-xl md:p-6">
                 <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-electric">
                   <Sparkles className="size-4" />
-                  What's New
+                  What&apos;s New
                 </p>
                 <div className="mt-5 grid gap-3">
                   {whatsNew.map((entry) => (
