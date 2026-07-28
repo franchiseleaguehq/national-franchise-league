@@ -4,8 +4,12 @@ import { Bell, CalendarDays, Scale, ShieldCheck, Trophy, Users } from "lucide-re
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSession } from "@/lib/auth/session";
-import { applicationStatusLabel, getCommissionerDashboardData } from "@/lib/db/repositories";
+import { getCommissionerSetup } from "@/lib/db/commissioner-store";
+import { applicationStatusLabel, getCommissionerDashboardData, getTeamLotteryData } from "@/lib/db/repositories";
 import { OwnerWorkflowPanel } from "./owner-workflow-panel";
+import { TeamLotteryPanel } from "./team-lottery-panel";
+
+export const dynamic = "force-dynamic";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -19,12 +23,16 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 export default async function CommissionerDashboardPage() {
   const session = await getCommissionerSession();
   if (!session) redirect("/commissioner/login");
+  const setup = await getCommissionerSetup();
+  if (!setup || setup.account.ownerId !== session.ownerId) redirect("/commissioner/login");
 
   const data = getCommissionerDashboardData();
+  const lotteryData = getTeamLotteryData();
   const formerOwner = data.owners.find((owner) => owner.status === "former");
+  const profileHref = `/owners/${setup.owner.slug}`;
 
   return (
-    <main className="min-h-screen bg-black px-5 py-10 text-white md:px-8">
+    <main id="top" className="min-h-screen bg-black px-5 py-10 text-white md:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
           <div>
@@ -35,10 +43,30 @@ export default async function CommissionerDashboardPage() {
             <h1 className="mt-3 font-[var(--font-oswald)] text-5xl font-bold uppercase text-white md:text-7xl">Commissioner Dashboard</h1>
             <p className="mt-3 max-w-3xl text-chrome-300">Manage the National Franchise League’s Madden PS5 operations from one protected broadcast desk.</p>
           </div>
-          <form action="/api/auth/logout" method="post">
-            <Button type="submit" variant="chrome" size="lg">Sign Out</Button>
-          </form>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Button asChild variant="chrome" size="lg"><Link href={profileHref}>My Profile</Link></Button>
+            <Button asChild variant="chrome" size="lg"><Link href="/owners">Owner Directory</Link></Button>
+            <form action="/api/auth/logout" method="post">
+              <Button type="submit" variant="chrome" size="lg" className="w-full">Logout</Button>
+            </form>
+          </div>
         </div>
+
+        <nav className="mt-5 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]">
+          {[
+            ["Commissioner Hub", "#top"],
+            ["Applications", "#applications"],
+            ["League Management", "#league-management"],
+            ["Owners", "#owners"],
+            ["Teams", "#teams"],
+            ["Team Lottery", "#team-lottery"],
+            ["Broadcasting", "#broadcasting"],
+          ].map(([label, href]) => (
+            <Link key={label} href={href} className="shrink-0 rounded-md border border-white/10 bg-white/[0.05] px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-chrome-200 transition hover:border-electric/50 hover:text-white">
+              {label}
+            </Link>
+          ))}
+        </nav>
 
         <section className="mt-8 grid gap-4 md:grid-cols-4">
           <StatCard label="Owners" value={data.owners.length} />
@@ -48,7 +76,7 @@ export default async function CommissionerDashboardPage() {
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
-          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
+          <article id="league-management" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Scale className="text-electric" /> Trade Queue</h2>
             <div className="mt-4 max-h-80 space-y-3 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {data.pendingTrades.map((trade) => (
@@ -60,7 +88,7 @@ export default async function CommissionerDashboardPage() {
             </div>
           </article>
 
-          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
+          <article id="owners" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Bell className="text-electric" /> Announcements</h2>
             <div className="mt-4 max-h-80 space-y-3 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {data.announcements.map((item) => (
@@ -72,7 +100,7 @@ export default async function CommissionerDashboardPage() {
             </div>
           </article>
 
-          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
+          <article id="teams" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Users className="text-electric" /> Owners</h2>
             <div className="mt-4 max-h-80 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {data.owners.map((owner) => (
@@ -96,7 +124,7 @@ export default async function CommissionerDashboardPage() {
             </div>
           </article>
 
-          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+          <article id="broadcasting" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ShieldCheck className="text-electric" /> Owner Portal Controls</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
               Commissioner-only controls define who can access active-owner tools and which information stays official league data. Public users cannot edit profiles, approve applications, assign teams, or change records.
@@ -118,7 +146,7 @@ export default async function CommissionerDashboardPage() {
             </div>
           </article>
 
-          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+          <article id="applications" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Bell className="text-electric" /> Application Inbox</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
               Applications are private to the commissioner area. Submitted applications remain pending until the commissioner reviews them; approval alone does not assign a team.
@@ -129,7 +157,8 @@ export default async function CommissionerDashboardPage() {
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{applicationStatusLabel(application.status)}</p>
                   <p className="mt-2 font-bold text-white">{application.preferredDisplayName} | {application.gamertag}</p>
                   <p className="mt-1 text-sm text-chrome-300">{application.fullName} | {application.email}</p>
-                  <p className="mt-1 text-sm text-chrome-300">Preferred team: {data.teams.find((team) => team.id === application.preferredTeamId)?.fullName ?? application.preferredTeamId}</p>
+                  <p className="mt-1 text-sm text-chrome-300">Team preferences: {application.teamPreferenceNotes}</p>
+                  <p className="mt-1 text-sm font-bold text-electric">Team Selection Status: Awaiting Lottery</p>
                   <p className="mt-2 text-sm leading-6 text-chrome-400">{application.reviewerNote ?? application.whyJoin}</p>
                 </div>
               )) : (
@@ -145,12 +174,15 @@ export default async function CommissionerDashboardPage() {
                 preferredDisplayName: application.preferredDisplayName,
                 gamertag: application.gamertag,
                 email: application.email,
-                preferredTeamId: application.preferredTeamId,
+                teamPreferenceNotes: application.teamPreferenceNotes,
                 status: application.status,
               }))}
-              teams={data.teams.map((team) => ({ id: team.id, fullName: team.fullName, isOpen: team.isOpen }))}
               formerOwner={formerOwner ? { id: formerOwner.id, name: formerOwner.name, slug: formerOwner.slug, status: formerOwner.status, teamId: formerOwner.teamId, pastTeamIds: formerOwner.pastTeamIds } : undefined}
             />
+          </article>
+
+          <article id="team-lottery" className="lg:col-span-2">
+            <TeamLotteryPanel season={lotteryData.season} owners={lotteryData.poolOwners} teams={lotteryData.teams} />
           </article>
         </section>
 

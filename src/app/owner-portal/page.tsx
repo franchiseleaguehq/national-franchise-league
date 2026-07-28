@@ -5,12 +5,14 @@ import { ClipboardList, FileText, KeyRound, LockKeyhole, RotateCcw, ShieldCheck,
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getOwnerDirectory } from "@/lib/db/repositories";
+import { getOwnerDirectory, getUnassignedOwnerProfiles } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
   title: "Owner Portal | National Franchise League",
   description: "Owner sign-in, owner directory, open teams, applications, and rulebook access for the National Franchise League.",
 };
+
+export const dynamic = "force-dynamic";
 
 function PortalAction({ href, icon: Icon, title, note, primary = false }: { href: string; icon: LucideIcon; title: string; note: string; primary?: boolean }) {
   return (
@@ -33,8 +35,9 @@ function PortalAction({ href, icon: Icon, title, note, primary = false }: { href
 
 export default function OwnerPortalPage() {
   const directory = getOwnerDirectory();
+  const unassignedOwners = getUnassignedOwnerProfiles();
   const openTeams = directory.filter((entry) => !entry.owner).length;
-  const activeOwners = directory.filter((entry) => entry.owner).length;
+  const activeOwners = directory.filter((entry) => entry.owner).length + unassignedOwners.length;
 
   return (
     <main className="min-h-screen bg-black pb-14 text-white">
@@ -84,7 +87,7 @@ export default function OwnerPortalPage() {
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <PortalAction href="#sign-in-coming-soon" icon={LockKeyhole} title="Sign In" note="Sign In Coming Soon. Active-owner access is not public yet." primary />
             <PortalAction href="/owners" icon={Users} title="View Owner Directory" note="Browse all 32 teams, current owners, and open teams." />
-            <PortalAction href="/owners/johnny-torres" icon={UserRound} title="My Profile" note="Preview the owner profile experience using the sample commissioner profile." />
+            <PortalAction href="/commissioner/login" icon={UserRound} title="My Profile" note="Sign in as Commissioner after setup to access your linked permanent profile." />
             <PortalAction href="#reset-password-coming-soon" icon={RotateCcw} title="Reset Password" note="Password reset will activate after owner authentication is approved." />
           </div>
         </article>
@@ -98,13 +101,13 @@ export default function OwnerPortalPage() {
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-electric">Become an Owner</p>
               <h2 className="mt-2 font-[var(--font-oswald)] text-4xl font-bold uppercase leading-none">Join the League</h2>
               <p className="mt-3 text-sm leading-6 text-chrome-300">
-                Applications go into Pending Commissioner Review. No applicant becomes an active owner or receives team access until the commissioner approves and assigns a team.
+                Applications go into Pending Commissioner Review. Approved owners start unassigned and enter the Commissioner-run team lottery before selecting a team.
               </p>
             </div>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <PortalAction href="/apply" icon={ClipboardList} title="Apply to Join" note="Submit your application for commissioner review." primary />
-            <PortalAction href="/owners#open-teams" icon={Users} title="View Open Teams" note="See every available team and apply directly." />
+            <PortalAction href="/owners#open-teams" icon={Users} title="View Lottery Teams" note="See every team available for the Commissioner-run lottery." />
             <PortalAction href="/rules#orientation" icon={KeyRound} title="Read Rookie Orientation" note="Start with the new-owner basics before applying." />
             <PortalAction href="/rules" icon={FileText} title="Read Official Rulebook" note="Review the full National Franchise League rulebook." />
           </div>

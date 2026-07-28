@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Radio, Shield, Trophy, Users } from "lucide-react";
+import { Radio, Shield, Trophy, UserRound, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getOwnerDirectory, ownerStatusLabel } from "@/lib/db/repositories";
+import { getOwnerDirectory, getUnassignedOwnerProfiles, ownerStatusLabel } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
   title: "Owner Portal | National Franchise League",
   description: "National Franchise League owner directory, open teams, and owner profiles.",
 };
+
+export const dynamic = "force-dynamic";
 
 function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation: string; primaryColor: string; secondaryColor: string }) {
   return (
@@ -24,8 +26,9 @@ function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation
 
 export default function OwnersPage() {
   const directory = getOwnerDirectory();
+  const unassignedOwners = getUnassignedOwnerProfiles();
   const openTeams = directory.filter((entry) => !entry.owner);
-  const activeOwners = directory.filter((entry) => entry.owner);
+  const activeProfileCount = directory.filter((entry) => entry.owner).length + unassignedOwners.length;
 
   return (
     <main className="min-h-screen bg-black pb-14 text-white">
@@ -48,7 +51,7 @@ export default function OwnersPage() {
             </div>
             <div className="rounded-md border border-white/10 bg-black/50 p-4">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Active Profiles</p>
-              <p className="mt-1 font-[var(--font-oswald)] text-3xl font-bold text-white">{activeOwners.length}</p>
+              <p className="mt-1 font-[var(--font-oswald)] text-3xl font-bold text-white">{activeProfileCount}</p>
             </div>
             <div className="rounded-md border border-white/10 bg-black/50 p-4">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-chrome-400">Open Teams</p>
@@ -86,7 +89,7 @@ export default function OwnersPage() {
                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-electric">{ownerStatusLabel(owner?.status, owner?.role)}</p>
                     <h3 className="mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase leading-none text-white">{team.fullName}</h3>
                     <p className="mt-2 text-sm font-semibold text-chrome-300">{owner?.name ?? "Open Team"}</p>
-                    <p className="text-sm text-chrome-400">{owner?.gamertag ?? "Apply for this team"}</p>
+                    <p className="text-sm text-chrome-400">{owner?.gamertag ?? "Available for lottery"}</p>
                   </div>
                 </div>
 
@@ -129,8 +132,8 @@ export default function OwnersPage() {
 
                 <div className="mt-4 grid gap-2">
                   <Button asChild variant={isOpen ? "electric" : "chrome"} className="w-full">
-                    <Link href={isOpen ? `/apply?team=${team.id}` : `/owners/${profileSlug}`}>
-                      {isOpen ? "Apply for This Team" : "View Profile"}
+                    <Link href={isOpen ? "/apply" : `/owners/${profileSlug}`}>
+                      {isOpen ? "Apply to Join Lottery" : "View Profile"}
                     </Link>
                   </Button>
                   <Button asChild variant="chrome" className="w-full">
@@ -144,6 +147,38 @@ export default function OwnersPage() {
             );
           })}
         </div>
+
+        {unassignedOwners.length > 0 ? (
+          <section className="mt-8">
+            <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-electric">
+              <UserRound className="size-4" />
+              Unassigned Profiles
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {unassignedOwners.map((owner) => (
+                <article key={owner.id} className="rounded-md border border-electric/30 bg-electric/10 p-4 shadow-chrome">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={owner.avatarSrc ?? "/league-logo.png"}
+                      alt={`${owner.name} profile avatar`}
+                      width={56}
+                      height={56}
+                      className="size-14 rounded-md object-contain"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-electric">{ownerStatusLabel(owner.status, owner.role)}</p>
+                      <h3 className="truncate font-[var(--font-oswald)] text-2xl font-bold uppercase leading-none text-white">{owner.name}</h3>
+                      <p className="truncate text-sm text-chrome-300">{owner.gamertag}</p>
+                    </div>
+                  </div>
+                  <Button asChild variant="chrome" className="mt-4 w-full">
+                    <Link href={`/owners/${owner.slug}`}>View Profile</Link>
+                  </Button>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </section>
     </main>
   );

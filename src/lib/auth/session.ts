@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 
 const cookieName = "nfl_commissioner_session";
+const sessionMaxAgeSeconds = 60 * 60 * 8;
 
 function secret() {
   return process.env.COMMISSIONER_SESSION_SECRET ?? "local-development-session-secret-change-before-production";
@@ -12,52 +13,47 @@ function sign(value: string) {
 }
 
 export function createSessionValue(subject: string) {
-  const payload = `${subject}.${Date.now()}`;
+  const expiresAt = Date.now() + sessionMaxAgeSeconds * 1000;
+  const payload = `${subject}.${expiresAt}`;
   return `${payload}.${sign(payload)}`;
 }
 
 export function verifySessionValue(value?: string) {
-  if (!value) return false;
+  if (!value) return null;
   const parts = value.split(".");
-  if (parts.length !== 3) return false;
+  if (parts.length !== 3) return null;
   const payload = `${parts[0]}.${parts[1]}`;
   const expected = sign(payload);
   const received = parts[2];
 
   try {
-    return timingSafeEqual(Buffer.from(expected), Buffer.from(received));
+    const isValid = timingSafeEqual(Buffer.from(expected), Buffer.from(received));
+    const expiresAt = Number(parts[1]);
+    if (!isValid || Number.isNaN(expiresAt) || Date.now() > expiresAt) return null;
+    return { ownerId: parts[0], expiresAt };
   } catch {
-    return false;
+    return null;
   }
 }
 
 export async function getCommissionerSession() {
   const store = await cookies();
   const value = store.get(cookieName)?.value;
-  return verifySessionValue(value) ? value : null;
+  return verifySessionValue(value);
 }
 
-export async function setCommissionerSession(subject = "commissioner") {
+export async function setCommissionerSession(subject: string) {
   const store = await cookies();
   store.set(cookieName, createSessionValue(subject), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.VERCEL_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 8,
+    maxAge: sessionMaxAgeSeconds,
   });
 }
 
 export async function clearCommissionerSession() {
   const store = await cookies();
   store.delete(cookieName);
-}
-
-export function verifyCommissionerPassword(password: string) {
-  const configured = process.env.COMMISSIONER_PASSWORD ?? "commissioner-demo-password";
-  try {
-    return timingSafeEqual(Buffer.from(password), Buffer.from(configured));
-  } catch {
-    return false;
-  }
 }

@@ -5,14 +5,12 @@ import { notFound } from "next/navigation";
 import { Award, CalendarDays, Clock, Gamepad2, Radio, Shield, Trophy, UserRound, Youtube } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getOwnerPortalProfile, getOwnerProfile, getOwnerStats, listOwnerProfileSlugs, ownerStatusLabel } from "@/lib/db/repositories";
+import { getOwnerPortalProfile, getOwnerProfile, getOwnerStats, ownerStatusLabel } from "@/lib/db/repositories";
 import type { LucideIcon } from "lucide-react";
 
 type StreamingLink = [label: string, href: string, Icon: LucideIcon];
 
-export function generateStaticParams() {
-  return listOwnerProfileSlugs().map((ownerId) => ({ ownerId }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ ownerId: string }> }): Promise<Metadata> {
   const { ownerId } = await params;
@@ -69,7 +67,7 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
               </div>
             </div>
             <Button asChild variant={isOpen ? "electric" : "chrome"} size="lg">
-              <Link href={isOpen ? `/apply?team=${team.id}` : "/owners"}>{isOpen ? "Apply for This Team" : "Back to Owners"}</Link>
+              <Link href={isOpen ? "/apply" : "/owners"}>{isOpen ? "Apply to Join Lottery" : "Back to Owners"}</Link>
             </Button>
           </div>
         </div>
@@ -121,7 +119,7 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
               Owner Bio
             </p>
             <p className="mt-4 text-base leading-8 text-chrome-200">
-              {owner?.bio ?? "This team is currently open. Apply for this team to join the National Franchise League owner community."}
+              {owner?.bio ?? "This team is available for the league lottery. Apply to join the National Franchise League owner community; team selection happens only through the Commissioner-run lottery."}
             </p>
           </article>
 
@@ -139,6 +137,14 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
                 <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-chrome-400">Hall of Fame</p>
                   <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{owner.hallOfFame ? "Yes" : "No"}</p>
+                </div>
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-chrome-400">Current Team</p>
+                  <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{owner.teamId ? team.fullName : "Unassigned"}</p>
+                </div>
+                <div className="rounded-md border border-white/10 bg-white/[0.045] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-chrome-400">Team Selection Status</p>
+                  <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{owner.teamSelectionStatus === "awaiting_lottery" ? "Awaiting Lottery" : owner.teamSelectionStatus?.replaceAll("_", " ") ?? "Awaiting Lottery"}</p>
                 </div>
               </div>
               <p className="mt-4 text-sm leading-6 text-chrome-300">

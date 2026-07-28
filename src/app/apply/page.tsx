@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "Apply to join the National Franchise League Madden owner community.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function ApplyPage() {
   const teams = getApplicationTeams();
   const openTeams = teams.filter((team) => team.isOpen).length;
@@ -41,7 +43,7 @@ export default function ApplyPage() {
             <Button asChild variant="chrome">
               <Link href="/owners#open-teams">
                 <Users className="size-4" />
-                View Open Teams
+                View Lottery Teams
               </Link>
             </Button>
           </div>
@@ -53,7 +55,7 @@ export default function ApplyPage() {
           <ShieldCheck className="size-8 text-electric" />
           <h2 className="mt-4 font-[var(--font-oswald)] text-3xl font-bold uppercase">Application Desk</h2>
           <p className="mt-3 text-sm leading-6 text-chrome-300">
-            {openTeams} teams are marked open in this draft. Commissioner review is required before any owner is assigned.
+            {openTeams} teams are available for the lottery. Commissioner approval adds owners to the lottery pool; it does not assign or reserve a team.
           </p>
         </aside>
         <article className="rounded-md border border-white/12 bg-black/62 p-5 shadow-chrome">

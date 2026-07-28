@@ -2,11 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Shield, Star, Trophy } from "lucide-react";
 
-import { getTeamProfile, listTeamIds } from "@/lib/db/repositories";
+import { getTeamProfile } from "@/lib/db/repositories";
 
-export function generateStaticParams() {
-  return listTeamIds().map((teamId) => ({ teamId }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function TeamProfilePage({ params }: { params: Promise<{ teamId: string }> }) {
   const { teamId } = await params;

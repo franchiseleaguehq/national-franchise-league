@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -43,9 +42,6 @@ function TextArea({ label, name, placeholder }: { label: string; name: string; p
 }
 
 export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
-  const searchParams = useSearchParams();
-  const requestedTeam = searchParams.get("team") ?? "";
-  const defaultTeam = teams.some((team) => team.id === requestedTeam) ? requestedTeam : "";
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -96,20 +92,14 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
         <Field label="Email" name="email" type="email" placeholder="name@example.com" />
         <Field label="Phone number optional" name="phone" type="tel" required={false} placeholder="Optional" />
         <Field label="Time zone" name="timezone" placeholder="Eastern, Central, Pacific..." />
-        <label className="grid gap-2 text-sm font-bold text-chrome-200">
-          Preferred team
-          <select name="preferredTeamId" required defaultValue={defaultTeam} className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
-            <option value="">Select a team</option>
-            {teams.map((team) => (
-              <option key={team.id} value={team.id}>
-                {team.label} {team.isOpen ? "(Open)" : "(Owned)"}
-              </option>
-            ))}
-          </select>
-        </label>
       </div>
 
-      <TextArea label="Backup team choices" name="backupTeamChoices" placeholder="List 2-4 backup teams." />
+      <div className="rounded-md border border-electric/25 bg-electric/10 p-4 text-sm leading-6 text-chrome-200">
+        All approved owners start unassigned with Team Selection Status: Awaiting Lottery. All {teams.length} teams stay lottery-controlled until selected. Team preferences are reference notes only and do not reserve, guarantee, or assign a team.
+      </div>
+
+      <TextArea label="Team preferences for reference only" name="teamPreferenceNotes" placeholder="Optional: list teams you are interested in. This does not reserve or guarantee a team." />
+      <TextArea label="Backup team preferences for reference only" name="backupTeamChoices" placeholder="Optional: list other teams you would consider. Lottery order controls actual selection." />
       <TextArea label="Madden league experience" name="maddenLeagueExperience" placeholder="Tell us about leagues you have played in." />
       <TextArea label="Availability" name="availability" placeholder="Best days and times to schedule games." />
 

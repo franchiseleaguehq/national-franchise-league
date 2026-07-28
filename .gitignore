@@ -3,6 +3,7 @@ node_modules
 out
 dist
 .env*
+.data
 .npm-cache
 *.tsbuildinfo
 .DS_Store

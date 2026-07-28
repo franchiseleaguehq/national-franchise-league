@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { saveOwnerApplication } from "@/lib/db/applications";
-import { getApplicationTeams, getLeague } from "@/lib/db/repositories";
+import { getLeague } from "@/lib/db/repositories";
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -10,12 +10,10 @@ function readString(formData: FormData, key: string) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "preferredTeamId", "backupTeamChoices", "maddenLeagueExperience", "availability", "whyJoin"];
+  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "teamPreferenceNotes", "backupTeamChoices", "maddenLeagueExperience", "availability", "whyJoin"];
   const missingFields = requiredFields.filter((field) => !readString(formData, field));
   const readOrientation = formData.get("readOrientation") === "on";
   const agreeRulebook = formData.get("agreeRulebook") === "on";
-  const teams = getApplicationTeams();
-  const preferredTeamId = readString(formData, "preferredTeamId");
 
   if (missingFields.length > 0 || !readOrientation || !agreeRulebook) {
     return NextResponse.json(
@@ -28,10 +26,6 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!teams.some((team) => team.id === preferredTeamId)) {
-    return NextResponse.json({ ok: false, message: "Select a valid preferred team." }, { status: 400 });
-  }
-
   const league = getLeague();
   const application = saveOwnerApplication({
     id: `application_${Date.now()}`,
@@ -42,7 +36,7 @@ export async function POST(request: Request) {
     email: readString(formData, "email"),
     phone: readString(formData, "phone") || undefined,
     timezone: readString(formData, "timezone"),
-    preferredTeamId,
+    teamPreferenceNotes: readString(formData, "teamPreferenceNotes"),
     backupTeamChoices: readString(formData, "backupTeamChoices"),
     maddenLeagueExperience: readString(formData, "maddenLeagueExperience"),
     availability: readString(formData, "availability"),

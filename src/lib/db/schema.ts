@@ -37,6 +37,7 @@ export type OwnerRecord = {
   role: "commissioner" | "committee" | "owner";
   status: OwnerLeagueStatus;
   teamId?: ID;
+  teamSelectionStatus?: "awaiting_lottery" | "in_lottery" | "team_selected" | "passed" | "removed";
   pastTeamIds: ID[];
   discordHandle: string;
   bio: string;
@@ -105,7 +106,8 @@ export type ApplicationRecord = {
   email: string;
   phone?: string;
   timezone: string;
-  preferredTeamId: ID;
+  preferredTeamId?: ID;
+  teamPreferenceNotes: string;
   backupTeamChoices: string;
   maddenLeagueExperience: string;
   availability: string;
@@ -144,6 +146,28 @@ export type OwnerTeamAssignmentRecord = {
   status: "current" | "released" | "former";
 };
 
+export type TeamLotteryEntryStatus = "waiting" | "on_the_clock" | "team_selected" | "passed" | "removed";
+
+export type TeamLotteryEntryRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  season: number;
+  pickNumber: number;
+  status: TeamLotteryEntryStatus;
+  lockedAt?: string;
+};
+
+export type TeamLotterySelectionRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  teamId: ID;
+  season: number;
+  pickNumber: number;
+  selectedAt: string;
+};
+
 export type OwnerSeasonHistoryRecord = {
   id: ID;
   leagueId: ID;
@@ -153,6 +177,21 @@ export type OwnerSeasonHistoryRecord = {
   record: string;
   playoffRecord: string;
   notes: string;
+};
+
+export type CommissionerAccountRecord = {
+  id: ID;
+  leagueId: ID;
+  ownerId: ID;
+  email: string;
+  passwordHash: string;
+  role: "commissioner";
+  createdAt: string;
+};
+
+export type CommissionerSetupRecord = {
+  account: CommissionerAccountRecord;
+  owner: OwnerRecord;
 };
 
 export type GameRecord = {
@@ -260,6 +299,8 @@ export type DatabaseSnapshot = {
   ownerMemberships: OwnerMembershipRecord[];
   ownerTeamAssignments: OwnerTeamAssignmentRecord[];
   ownerSeasonHistory: OwnerSeasonHistoryRecord[];
+  teamLotteryEntries: TeamLotteryEntryRecord[];
+  teamLotterySelections: TeamLotterySelectionRecord[];
   games: GameRecord[];
   standings: StandingRecord[];
   trades: TradeRecord[];
