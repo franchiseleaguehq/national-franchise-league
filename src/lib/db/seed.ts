@@ -16,7 +16,7 @@ export const db: DatabaseSnapshot = {
       discordUrl: "https://discord.gg/nationalfranchiseleague",
       twitchChannel: "nationalfranchiseleague",
       youtubeChannelUrl: "https://www.youtube.com/@NFL.Madden25",
-      instagramUrl: "https://www.instagram.com/nationalfranchiseleague/",
+      instagramUrl: "https://www.instagram.com/nfl.madden25/",
     },
   ],
   owners: [],

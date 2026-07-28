@@ -14,7 +14,7 @@ export const nationalFranchiseLeague: MaddenLeague = {
     discord: "https://discord.gg/nationalfranchiseleague",
     twitchChannel: "nationalfranchiseleague",
     youtubeChannel: "https://www.youtube.com/@NFL.Madden25",
-    instagram: "https://www.instagram.com/nationalfranchiseleague/",
+    instagram: "https://www.instagram.com/nfl.madden25/",
   },
   teams: [
     { id: "nyg", city: "New York", name: "Giants", fullName: "New York Giants", logoSrc: "/teams/giants.png" },

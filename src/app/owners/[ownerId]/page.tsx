@@ -49,7 +49,6 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
   const streamingLinks: StreamingLink[] = [];
   if (owner?.youtubeUrl) streamingLinks.push(["YouTube", owner.youtubeUrl, Youtube]);
   if (owner?.twitchChannel) streamingLinks.push(["Twitch", `https://www.twitch.tv/${owner.twitchChannel}`, Radio]);
-  if (owner?.kickUrl) streamingLinks.push(["Kick", owner.kickUrl, Radio]);
 
   return (
     <main className="min-h-screen bg-black pb-14 text-white">

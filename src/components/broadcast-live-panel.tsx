@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const twitchLive = process.env.NEXT_PUBLIC_TWITCH_LIVE === "true";
-
 function getNextAdvance() {
   const now = new Date();
   const next = new Date(now);
@@ -32,19 +30,10 @@ function formatTimeLeft(target: Date): Array<[number, string]> {
 }
 
 export function LiveBadge() {
-  if (!twitchLive) {
-    return (
-      <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-chrome-200 backdrop-blur">
-        <span className="size-2 rounded-full bg-chrome-400" />
-        Offline
-      </span>
-    );
-  }
-
   return (
-    <span className="inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(239,68,68,0.75)]">
-      <span className="size-2 rounded-full bg-white animate-pulse" />
-      Live
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-chrome-200 backdrop-blur">
+      <span className="size-2 rounded-full bg-chrome-400" />
+      Offline
     </span>
   );
 }

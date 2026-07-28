@@ -69,20 +69,23 @@ const leagueConfig = {
 
 const officialLinks = {
   youtube: leagueConfig.youtubeChannel,
-  youtubeLive: `${leagueConfig.youtubeChannel}/live`,
   youtubeVideos: `${leagueConfig.youtubeChannel}/videos`,
   twitch: `https://www.twitch.tv/${leagueConfig.twitchChannel}`,
-  instagram: "https://www.instagram.com/nationalfranchiseleague/",
+  instagram: "https://www.instagram.com/nfl.madden25/",
   discord: "https://discord.gg/nationalfranchiseleague",
   groupMe: "https://groupme.com/join_group/national-franchise-league",
   contact: "mailto:commissioner@nationalfranchiseleague.com",
 };
 
 const mediaCenter = {
-  isLive: process.env.NEXT_PUBLIC_YOUTUBE_LIVE === "true",
   latestTitle: "National Franchise League Season Trailer",
   latestDeck: "Logo reveals, weekly broadcast energy, and team identity moments from the official league channel.",
   latestMeta: `Season ${leagueConfig.season} | Week ${leagueConfig.week} media desk`,
+};
+
+const siteMeta = {
+  version: "v2026.07.28",
+  lastUpdated: "July 28, 2026",
 };
 
 type SocialLink = [label: string, href: string, Icon: LucideIcon];
@@ -359,12 +362,10 @@ function SportsTicker() {
 }
 
 function LeagueMediaCenter() {
-  const featuredHref = mediaCenter.isLive ? officialLinks.youtubeLive : officialLinks.youtubeVideos;
-  const badge = mediaCenter.isLive ? "LIVE NOW" : "Latest Video";
-  const title = mediaCenter.isLive ? "Watch Live on YouTube" : mediaCenter.latestTitle;
-  const deck = mediaCenter.isLive
-    ? "The official National Franchise League broadcast is live. Jump straight to the YouTube stream from desktop or mobile."
-    : mediaCenter.latestDeck;
+  const featuredHref = officialLinks.youtubeVideos;
+  const badge = "Latest Video";
+  const title = mediaCenter.latestTitle;
+  const deck = mediaCenter.latestDeck;
   const mediaQueue = [
     ["Broadcast Schedule", "Pregame windows, featured kickoffs, and postgame recaps stay organized here."],
     ["Latest Shorts", "Cutdowns, team reveals, rivalry clips, and weekly league storylines."],
@@ -388,7 +389,7 @@ function LeagueMediaCenter() {
           </div>
           <div className="hidden min-w-44 rounded-md border border-white/15 bg-black/45 px-4 py-3 text-right shadow-chrome backdrop-blur md:block">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-chrome-300">Media Status</p>
-            <p className={`mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase ${mediaCenter.isLive ? "text-red-400" : "text-white"}`}>{badge}</p>
+            <p className="mt-1 font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">{badge}</p>
           </div>
         </div>
 
@@ -410,8 +411,8 @@ function LeagueMediaCenter() {
             <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#ef4444,#ffffff,#00a3ff)]" />
             <div className="relative flex min-h-[420px] flex-col justify-between p-5 md:min-h-[460px] md:p-8">
               <div className="flex flex-wrap items-center gap-3">
-                <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] ${mediaCenter.isLive ? "bg-red-600 text-white shadow-[0_0_26px_rgba(239,68,68,0.7)]" : "border border-white/15 bg-white/10 text-white backdrop-blur"}`}>
-                  {mediaCenter.isLive ? <span className="size-2 rounded-full bg-white animate-pulse" /> : <Play className="size-3 fill-current" />}
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-white backdrop-blur">
+                  <Play className="size-3 fill-current" />
                   {badge}
                 </span>
                 <span className="rounded-full border border-electric/40 bg-electric/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-electric shadow-electric backdrop-blur">
@@ -428,7 +429,7 @@ function LeagueMediaCenter() {
                 <p className="mt-4 max-w-xl leading-8 text-chrome-200">{deck}</p>
                 <div className="mt-6 inline-flex min-h-12 items-center gap-3 rounded-md bg-electric px-5 font-bold uppercase tracking-[0.12em] text-black shadow-electric transition duration-300 group-hover:-translate-y-1">
                   <Youtube className="size-5" />
-                  {mediaCenter.isLive ? "Watch Live on YouTube" : "Watch Latest Video"}
+                  Watch Latest Video
                   <ExternalLink className="size-4" />
                 </div>
               </div>
@@ -704,6 +705,9 @@ export default function Home() {
             </div>
             <p className="mt-5 max-w-3xl text-sm leading-7 text-chrome-400">
               Competitive Madden franchise league on PlayStation 5. Contact: commissioner@nationalfranchiseleague.com | Copyright 2026 National Franchise League.
+            </p>
+            <p className="mt-2 text-[11px] uppercase tracking-[0.16em] text-chrome-600">
+              Site {siteMeta.version} | Last updated {siteMeta.lastUpdated}
             </p>
           </div>
         </div>

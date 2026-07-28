@@ -25,7 +25,6 @@ type SetupInput = {
   timezone: string;
   youtubeUrl?: string;
   twitchChannel?: string;
-  kickUrl?: string;
   preferredPlatform: OwnerRecord["preferredPlatform"];
 };
 
@@ -160,7 +159,6 @@ export async function createCommissionerSetup(input: SetupInput) {
     preferredPlatform: input.preferredPlatform,
     twitchChannel: input.twitchChannel?.trim() || undefined,
     youtubeUrl: input.youtubeUrl?.trim() || undefined,
-    kickUrl: input.kickUrl?.trim() || undefined,
     seasonsPlayed: 0,
     careerRecord: "0-0",
     playoffRecord: "0-0",

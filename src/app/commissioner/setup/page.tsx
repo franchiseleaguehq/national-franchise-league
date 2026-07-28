@@ -96,10 +96,9 @@ export default async function CommissionerSetupPage({
 
             <section className="grid gap-4 rounded-md border border-white/10 bg-black/35 p-4">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-electric">Broadcasting</p>
-              <div className="grid min-w-0 gap-4 md:grid-cols-3">
+              <div className="grid min-w-0 gap-4 md:grid-cols-2">
                 <Field label="YouTube channel optional" name="youtubeUrl" type="url" required={false} placeholder="https://youtube.com/..." />
                 <Field label="Twitch channel optional" name="twitchChannel" required={false} placeholder="channel name" />
-                <Field label="Kick channel optional" name="kickUrl" type="url" required={false} placeholder="https://kick.com/..." />
               </div>
               <label className="grid gap-2 text-sm font-bold text-chrome-200">
                 Preferred streaming platform optional
@@ -107,7 +106,6 @@ export default async function CommissionerSetupPage({
                   <option value="None">None</option>
                   <option value="YouTube">YouTube</option>
                   <option value="Twitch">Twitch</option>
-                  <option value="Kick">Kick</option>
                 </select>
               </label>
             </section>

@@ -43,10 +43,9 @@ export type OwnerRecord = {
   bio: string;
   timezone: string;
   avatarSrc?: string;
-  preferredPlatform: "YouTube" | "Twitch" | "Kick" | "None";
+  preferredPlatform: "YouTube" | "Twitch" | "None";
   twitchChannel?: string;
   youtubeUrl?: string;
-  kickUrl?: string;
   seasonsPlayed: number;
   careerRecord: string;
   playoffRecord: string;
@@ -113,8 +112,7 @@ export type ApplicationRecord = {
   availability: string;
   youtubeUrl?: string;
   twitchChannel?: string;
-  kickUrl?: string;
-  preferredPlatform: "YouTube" | "Twitch" | "Kick" | "None";
+  preferredPlatform: "YouTube" | "Twitch" | "None";
   whyJoin: string;
   readOrientation: boolean;
   agreeRulebook: boolean;

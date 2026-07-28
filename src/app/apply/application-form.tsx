@@ -103,10 +103,9 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
       <TextArea label="Madden league experience" name="maddenLeagueExperience" placeholder="Tell us about leagues you have played in." />
       <TextArea label="Availability" name="availability" placeholder="Best days and times to schedule games." />
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="YouTube channel optional" name="youtubeUrl" type="url" required={false} placeholder="https://youtube.com/..." />
         <Field label="Twitch channel optional" name="twitchChannel" required={false} placeholder="channel name" />
-        <Field label="Kick channel optional" name="kickUrl" type="url" required={false} placeholder="https://kick.com/..." />
       </div>
 
       <label className="grid gap-2 text-sm font-bold text-chrome-200">
@@ -115,7 +114,6 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
           <option value="None">None</option>
           <option value="YouTube">YouTube</option>
           <option value="Twitch">Twitch</option>
-          <option value="Kick">Kick</option>
         </select>
       </label>
 

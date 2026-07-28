@@ -31,12 +31,11 @@ export async function POST(request: Request) {
   const timezone = readString(formData, "timezone");
   const youtubeUrl = readString(formData, "youtubeUrl");
   const twitchChannel = readString(formData, "twitchChannel");
-  const kickUrl = readString(formData, "kickUrl");
   const preferredPlatform = readString(formData, "preferredPlatform") as OwnerRecord["preferredPlatform"];
 
-  const allowedPlatforms: OwnerRecord["preferredPlatform"][] = ["YouTube", "Twitch", "Kick", "None"];
+  const allowedPlatforms: OwnerRecord["preferredPlatform"][] = ["YouTube", "Twitch", "None"];
 
-  if (!email || !password || !displayName || !gamertag || !bio || !timezone || password !== confirmPassword || password.length < 12 || !allowedPlatforms.includes(preferredPlatform) || !isValidUrl(avatarSrc) || !isValidUrl(youtubeUrl) || !isValidUrl(kickUrl)) {
+  if (!email || !password || !displayName || !gamertag || !bio || !timezone || password !== confirmPassword || password.length < 12 || !allowedPlatforms.includes(preferredPlatform) || !isValidUrl(avatarSrc) || !isValidUrl(youtubeUrl)) {
     return NextResponse.redirect(redirectUrl(request, "/commissioner/setup?error=1"), { status: 303 });
   }
 
@@ -52,7 +51,6 @@ export async function POST(request: Request) {
       timezone,
       youtubeUrl,
       twitchChannel,
-      kickUrl,
       preferredPlatform,
     });
   } catch (error) {

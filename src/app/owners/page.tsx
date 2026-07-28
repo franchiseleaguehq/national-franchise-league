@@ -81,7 +81,7 @@ export default async function OwnersPage() {
           {directory.map(({ team, owner, achievements, profileSlug }) => {
             const isOpen = !owner;
             const preferredPlatform = owner?.preferredPlatform ?? "None";
-            const streamingHref = owner?.youtubeUrl ?? (owner?.twitchChannel ? `https://www.twitch.tv/${owner.twitchChannel}` : owner?.kickUrl);
+            const streamingHref = owner?.youtubeUrl ?? (owner?.twitchChannel ? `https://www.twitch.tv/${owner.twitchChannel}` : undefined);
 
             return (
               <article key={team.id} className="rounded-md border border-white/12 bg-white/[0.045] p-4 shadow-chrome">
