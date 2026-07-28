@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Instagram, Mic2, Newspaper, Play, Radio, Sparkles, Twitch, Youtube, type LucideIcon } from "lucide-react";
+import { ExternalLink, Headphones, Instagram, Newspaper, Play, Radio, Sparkles, Twitch, Youtube, type LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getLeague } from "@/lib/db/repositories";
@@ -192,13 +192,19 @@ export default function MediaPage() {
         <div className="grid gap-6">
           <article className="rounded-md border border-white/12 bg-white/[0.045] p-5 shadow-chrome">
             <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-electric">
-              <Mic2 className="size-4" />
-              AI Weekly Show
+              <Headphones className="size-4" />
+              Official Audio Show
             </p>
-            <h2 className="mt-3 font-[var(--font-oswald)] text-4xl font-bold uppercase leading-none">Coming Soon</h2>
+            <h2 className="mt-3 font-[var(--font-oswald)] text-4xl font-bold uppercase leading-none">The Commissioner Report</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
-              Future commissioner-approved league podcast coverage will break down weekly scores, biggest upsets, players of the week, power rankings, trades, and next-week previews.
+              The future weekly audio desk for commissioner-approved coverage of scores, biggest upsets, players of the week, power rankings, trades, and next-week previews.
             </p>
+            <Button asChild variant="electric" size="lg" className="mt-5 w-full">
+              <Link href="/commissioner-report">
+                <Headphones className="size-5" />
+                Open The Commissioner Report
+              </Link>
+            </Button>
           </article>
 
           <article className="rounded-md border border-white/12 bg-white/[0.045] p-5 shadow-chrome">
