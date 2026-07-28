@@ -5,6 +5,7 @@ import { ClipboardList, FileText, KeyRound, LockKeyhole, RotateCcw, ShieldCheck,
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { getCommissionerSetup } from "@/lib/db/commissioner-store";
 import { getOwnerDirectory, getUnassignedOwnerProfiles } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
@@ -33,7 +34,8 @@ function PortalAction({ href, icon: Icon, title, note, primary = false }: { href
   );
 }
 
-export default function OwnerPortalPage() {
+export default async function OwnerPortalPage() {
+  await getCommissionerSetup();
   const directory = getOwnerDirectory();
   const unassignedOwners = getUnassignedOwnerProfiles();
   const openTeams = directory.filter((entry) => !entry.owner).length;

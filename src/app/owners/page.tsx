@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Radio, Shield, Trophy, UserRound, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { getCommissionerSetup } from "@/lib/db/commissioner-store";
 import { getOwnerDirectory, getUnassignedOwnerProfiles, ownerStatusLabel } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
@@ -24,7 +25,8 @@ function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation
   );
 }
 
-export default function OwnersPage() {
+export default async function OwnersPage() {
+  await getCommissionerSetup();
   const directory = getOwnerDirectory();
   const unassignedOwners = getUnassignedOwnerProfiles();
   const openTeams = directory.filter((entry) => !entry.owner);

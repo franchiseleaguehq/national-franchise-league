@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Award, CalendarDays, Clock, Gamepad2, Radio, Shield, Trophy, UserRound, Youtube } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { getCommissionerSetup } from "@/lib/db/commissioner-store";
 import { getOwnerPortalProfile, getOwnerProfile, getOwnerStats, ownerStatusLabel } from "@/lib/db/repositories";
 import type { LucideIcon } from "lucide-react";
 
@@ -14,6 +15,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ ownerId: string }> }): Promise<Metadata> {
   const { ownerId } = await params;
+  await getCommissionerSetup();
   const profile = getOwnerPortalProfile(ownerId);
   if (!profile) return {};
 
@@ -36,6 +38,7 @@ function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation
 
 export default async function OwnerProfilePage({ params }: { params: Promise<{ ownerId: string }> }) {
   const { ownerId } = await params;
+  await getCommissionerSetup();
   const profile = getOwnerPortalProfile(ownerId);
   if (!profile) notFound();
 
