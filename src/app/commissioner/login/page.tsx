@@ -44,7 +44,7 @@ export default async function CommissionerLoginPage({
         <div id="reset-password" className="mt-4 rounded-md border border-white/10 bg-white/[0.04] p-3 text-center text-xs leading-5 text-chrome-400">
           Forgot Password and Reset Password are reserved for the next secure recovery phase. No password reset token or default password is stored in source code.
         </div>
-        <Link href="/" className="mt-5 block text-center text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Hub</Link>
+        <Link href="/" className="mt-5 block text-center text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Home</Link>
       </section>
     </main>
   );

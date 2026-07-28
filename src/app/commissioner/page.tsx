@@ -243,7 +243,7 @@ export default async function CommissionerDashboardPage() {
 
         <Link href="/" className="mt-8 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">
           <Trophy className="size-4" />
-          Return to League Hub
+          Back to League Home
         </Link>
       </div>
     </main>

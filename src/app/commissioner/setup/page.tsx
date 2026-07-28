@@ -114,7 +114,7 @@ export default async function CommissionerSetupPage({
 
             <Button type="submit" variant="electric" size="xl" className="w-full">Create Commissioner Account</Button>
           </form>
-          <Link href="/" className="mt-6 block text-center text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Hub</Link>
+          <Link href="/" className="mt-6 block text-center text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Home</Link>
         </div>
       </section>
     </main>

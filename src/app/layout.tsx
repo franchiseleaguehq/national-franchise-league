@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Oswald } from "next/font/google";
 
+import { PublicHeader } from "@/components/public-header";
 import { PwaShell } from "@/components/pwa-shell";
 
 import "./globals.css";
@@ -76,6 +77,7 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/splash/ipad-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
       </head>
       <body className={`${inter.variable} ${oswald.variable} font-sans`}>
+        <PublicHeader />
         {children}
         <PwaShell />
       </body>

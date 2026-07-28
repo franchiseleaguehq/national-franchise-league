@@ -14,7 +14,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ te
   const record = profile.standing ? `${profile.standing.wins}-${profile.standing.losses}` : "0-0";
 
   return (
-    <main className="min-h-screen bg-black px-5 py-12 text-white md:px-8">
+    <main className="min-h-screen bg-black px-5 pb-12 pt-32 text-white md:px-8">
       <section className="mx-auto max-w-5xl">
         <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-electric"><Shield className="size-4" /> Team Profile</p>
         <h1 className="mt-3 font-[var(--font-oswald)] text-6xl font-bold uppercase text-white">{profile.team.fullName}</h1>
@@ -30,7 +30,7 @@ export default async function TeamProfilePage({ params }: { params: Promise<{ te
             {profile.stats.map((stat) => <div key={stat.id} className="rounded-md border border-white/10 bg-black/35 p-3">{stat.category}: {stat.playerName} | {stat.value} {stat.extra}</div>)}
           </div>
         </div>
-        <Link href="/" className="mt-8 inline-block text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Hub</Link>
+        <Link href="/" className="mt-8 inline-block text-sm font-bold uppercase tracking-[0.16em] text-chrome-300 transition hover:text-white">Back to League Home</Link>
       </section>
     </main>
   );

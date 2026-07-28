@@ -25,7 +25,6 @@ import {
 import { BroadcastPlayer, KickoffCountdown } from "@/components/broadcast-live-panel";
 import { Button } from "@/components/ui/button";
 import { getHomeData } from "@/lib/db/repositories";
-import { mainNavigationItems } from "@/lib/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -472,25 +471,6 @@ function LeagueMediaCenter() {
 export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-black pb-14 text-white">
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/55 backdrop-blur-2xl">
-        <div className="mx-auto flex min-h-24 max-w-7xl items-center justify-between gap-5 px-5 py-3 md:px-8">
-          <LeagueLogo compact />
-          <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.16em] text-chrome-200 xl:flex">
-            {mainNavigationItems.map((item) => (
-              <Link href={item.href} key={item.href} className="relative transition after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-electric after:transition-all hover:text-white hover:after:w-full">
-                {item.label}
-              </Link>
-            ))}
-          </div>
-          <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
-            <Link href={officialLinks.twitch} target="_blank" rel="noreferrer">
-              <Radio className="size-4" />
-              Live
-            </Link>
-          </Button>
-        </div>
-      </nav>
-
       <section className="relative h-[100svh] min-h-[680px] overflow-hidden pt-24">
         <Image src="/stadium-hero.png" alt="Cinematic football stadium lights and fog" fill priority className="object-cover animate-[stadiumDrift_22s_ease-in-out_infinite]" sizes="100vw" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.96)_0%,rgba(0,0,0,0.78)_38%,rgba(0,0,0,0.34)_72%,rgba(0,0,0,0.82)_100%)]" />

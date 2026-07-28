@@ -33,7 +33,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { mainNavigationItems } from "@/lib/navigation";
 import {
   leagueBasics,
   madden27ReviewTopics,
@@ -379,25 +378,6 @@ function SearchInput({ id, query, onChange }: { id: string; query: string; onCha
   );
 }
 
-function LeagueLogo() {
-  return (
-    <Link href="/" className="flex items-center gap-3" aria-label="National Franchise League home">
-      <Image
-        src="/league-logo.png"
-        alt="National Franchise League logo"
-        width={88}
-        height={120}
-        className="h-16 w-auto object-contain drop-shadow-[0_0_22px_rgba(0,163,255,0.42)]"
-        priority
-      />
-      <div className="leading-none">
-        <p className="font-[var(--font-oswald)] text-xl font-bold uppercase text-white md:text-2xl">National</p>
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-chrome-300">Franchise League</p>
-      </div>
-    </Link>
-  );
-}
-
 function RuleCard({ rule, number, categoryTitle, forceOpen }: { rule: RulebookRule; number: string; categoryTitle: string; forceOpen: boolean }) {
   const ruleId = slugify(`${categoryTitle}-${rule.title}`);
   const labels = getRuleLabels(rule);
@@ -626,19 +606,6 @@ export function RulesRulebook() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-black text-white">
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-2xl">
-        <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 py-2 md:px-8">
-          <LeagueLogo />
-          <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.16em] text-chrome-200 xl:flex">
-            {mainNavigationItems.map((item) => (
-              <Link href={item.href} key={item.href} className="transition hover:text-white">
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </nav>
-
       <section className="relative overflow-hidden pt-24">
         <Image src="/stadium-hero.png" alt="Football stadium lights" fill priority className="object-cover opacity-55" sizes="100vw" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.94)_76%,#05070a_100%)]" />
