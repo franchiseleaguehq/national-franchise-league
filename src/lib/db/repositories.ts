@@ -1,6 +1,7 @@
 import { db } from "./seed";
 import { listRuntimeApplications } from "./applications";
 import { getCommissionerSetupSync } from "./commissioner-store";
+import { leagueFeatures } from "@/lib/features";
 import type { ApplicationStatus, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
 
 const leagueId = "league_nfl";
@@ -29,6 +30,24 @@ function teamRecord(teamId: string) {
 
 function setupOwner() {
   return getCommissionerSetupSync()?.owner;
+}
+
+function isTradeRelatedText(value: string) {
+  return /\btrade|trades|trading\b/i.test(value);
+}
+
+function visibleAnnouncements() {
+  return db.announcements.filter((item) => {
+    if (leagueFeatures.tradeQueue) return true;
+    return !isTradeRelatedText(`${item.title} ${item.body}`);
+  });
+}
+
+function visibleTransactions() {
+  return db.transactions.filter((item) => {
+    if (leagueFeatures.tradeQueue) return true;
+    return !isTradeRelatedText(item.description);
+  });
 }
 
 function leagueOwners() {
@@ -127,12 +146,12 @@ export function getHomeData() {
       .filter((row) => row.leagueId === league.id)
       .sort((a, b) => a.rank - b.rank)
       .map((row) => [String(row.rank), teamName(row.teamId), row.note]),
-    newsItems: db.announcements.filter((item) => item.leagueId === league.id).map((item) => [item.title, item.body]),
+    newsItems: visibleAnnouncements().filter((item) => item.leagueId === league.id).map((item) => [item.title, item.body]),
     commissionerHub: [
-      ...db.announcements.filter((item) => item.leagueId === league.id).map((item) => [item.title, item.body]),
-      ...db.trades.filter((trade) => trade.leagueId === league.id).map((trade) => ["Trade approvals", trade.summary]),
+      ...visibleAnnouncements().filter((item) => item.leagueId === league.id).map((item) => [item.title, item.body]),
+      ...(leagueFeatures.tradeQueue ? db.trades.filter((trade) => trade.leagueId === league.id).map((trade) => ["Trade approvals", trade.summary]) : []),
     ],
-    transactions: db.transactions.filter((tx) => tx.leagueId === league.id).map((tx) => [teamName(tx.teamId), tx.description]),
+    transactions: visibleTransactions().filter((tx) => tx.leagueId === league.id).map((tx) => [teamName(tx.teamId), tx.description]),
     hallOfFame: db.hallOfFame.filter((item) => item.leagueId === league.id),
     teamRecord,
   };
@@ -141,13 +160,24 @@ export function getHomeData() {
 export function getCommissionerDashboardData() {
   const league = getLeague();
   const applications = [...listRuntimeApplications(), ...db.applications.filter((application) => application.leagueId === league.id)];
+  const owners = leagueOwners().filter((owner) => owner.leagueId === league.id);
+  const teams = leagueTeams().filter((team) => team.leagueId === league.id);
+  const unassignedOwners = owners.filter((owner) => !owner.teamId);
+  const pendingApplications = applications.filter((application) => application.status === "pending_commissioner_review" || application.status === "submitted");
+  const approvedAwaitingLottery = applications.filter((application) => application.status === "approved" || application.status === "approved_awaiting_team_assignment");
+
   return {
     league,
-    pendingTrades: db.trades.filter((trade) => trade.leagueId === league.id && trade.status === "pending"),
-    announcements: db.announcements.filter((item) => item.leagueId === league.id),
-    owners: leagueOwners().filter((owner) => owner.leagueId === league.id),
-    teams: leagueTeams().filter((team) => team.leagueId === league.id),
+    tradeQueueEnabled: leagueFeatures.tradeQueue,
+    pendingTrades: leagueFeatures.tradeQueue ? db.trades.filter((trade) => trade.leagueId === league.id && trade.status === "pending") : [],
+    announcements: visibleAnnouncements().filter((item) => item.leagueId === league.id),
+    owners,
+    teams,
     applications,
+    pendingApplications,
+    approvedAwaitingLottery,
+    unassignedOwners,
+    openLeagueSlots: Math.max(0, teams.length - owners.filter((owner) => owner.status !== "former" && owner.status !== "banned").length),
     achievements: db.ownerAchievements,
     memberships: leagueMemberships().filter((membership) => membership.leagueId === league.id),
     assignments: leagueAssignments().filter((assignment) => assignment.leagueId === league.id),

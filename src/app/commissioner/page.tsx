@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Bell, CalendarDays, Scale, ShieldCheck, Trophy, Users } from "lucide-react";
+import { Bell, CalendarDays, ClipboardList, Dice5, ListChecks, Scale, ShieldCheck, Trophy, UserRound, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSession } from "@/lib/auth/session";
@@ -20,6 +21,16 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
   );
 }
 
+function MiniStatusCard({ label, value, note }: { label: string; value: string | number; note: string }) {
+  return (
+    <div className="rounded-md border border-white/10 bg-black/35 p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{label}</p>
+      <p className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white">{value}</p>
+      <p className="mt-1 text-sm leading-6 text-chrome-300">{note}</p>
+    </div>
+  );
+}
+
 export default async function CommissionerDashboardPage() {
   const session = await getCommissionerSession();
   if (!session) redirect("/commissioner/login");
@@ -30,6 +41,11 @@ export default async function CommissionerDashboardPage() {
   const lotteryData = getTeamLotteryData();
   const formerOwner = data.owners.find((owner) => owner.status === "former");
   const profileHref = `/owners/${setup.owner.slug}`;
+  const recentCommissionerActions: Array<{ title: string; note: string; Icon: LucideIcon }> = [
+    { title: "Setup Ready", note: "One-time Commissioner account setup is waiting for durable storage and first account creation.", Icon: ShieldCheck },
+    { title: "Lottery Policy Active", note: "No owner can choose or reserve a team before the Commissioner-run lottery.", Icon: Dice5 },
+    { title: "Owner Profiles Empty", note: "No seeded users or sample Commissioner accounts are present in production seed data.", Icon: UserRound },
+  ];
 
   return (
     <main id="top" className="min-h-screen bg-black px-5 py-10 text-white md:px-8">
@@ -71,21 +87,27 @@ export default async function CommissionerDashboardPage() {
         <section className="mt-8 grid gap-4 md:grid-cols-4">
           <StatCard label="Owners" value={data.owners.length} />
           <StatCard label="Teams" value={data.teams.length} />
-          <StatCard label="Pending Trades" value={data.pendingTrades.length} />
+          <StatCard label="Open Slots" value={data.openLeagueSlots} />
           <StatCard label="Applications" value={data.applications.length} />
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
           <article id="league-management" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
-            <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Scale className="text-electric" /> Trade Queue</h2>
-            <div className="mt-4 max-h-80 space-y-3 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
-              {data.pendingTrades.map((trade) => (
-                <div key={trade.id} className="rounded-md border border-white/10 bg-black/35 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-electric">{trade.status}</p>
-                  <p className="mt-2 text-chrome-100">{trade.summary}</p>
-                </div>
-              ))}
+            <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ClipboardList className="text-electric" /> Owner Onboarding</h2>
+            <p className="mt-3 text-sm leading-6 text-chrome-300">
+              Current Commissioner focus is reviewing applicants, filling the approved-owner pool, and preparing the team lottery before team assignments begin.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <MiniStatusCard label="Pending Applications" value={data.pendingApplications.length} note="Need review, notes, approval, rejection, or more information." />
+              <MiniStatusCard label="Approved Awaiting Lottery" value={data.approvedAwaitingLottery.length} note="Approved owners still unassigned until the lottery order is locked." />
+              <MiniStatusCard label="Unassigned Owners" value={data.unassignedOwners.length} note="Includes the Commissioner and approved owners without teams." />
+              <MiniStatusCard label="Open League Slots" value={data.openLeagueSlots} note="Available owner seats before the league reaches 32 owners." />
             </div>
+            {!data.tradeQueueEnabled ? (
+              <p className="mt-4 rounded-md border border-white/10 bg-white/[0.045] p-3 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
+                Future roster-movement tools stay offline until owner approvals, lottery, team assignments, companion data, and the official workflow are ready.
+              </p>
+            ) : null}
           </article>
 
           <article id="owners" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl">
@@ -124,6 +146,20 @@ export default async function CommissionerDashboardPage() {
             </div>
           </article>
 
+          {data.tradeQueueEnabled ? (
+            <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+              <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Scale className="text-electric" /> Trade Queue</h2>
+              <div className="mt-4 max-h-80 space-y-3 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
+                {data.pendingTrades.map((trade) => (
+                  <div key={trade.id} className="rounded-md border border-white/10 bg-black/35 p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-electric">{trade.status}</p>
+                    <p className="mt-2 text-chrome-100">{trade.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ) : null}
+
           <article id="broadcasting" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ShieldCheck className="text-electric" /> Owner Portal Controls</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
@@ -133,8 +169,8 @@ export default async function CommissionerDashboardPage() {
               {[
                 ["View all applications", "Review private application details inside this protected hub only."],
                 ["Approve or reject", "Move applications through commissioner-controlled statuses."],
-                ["Assign owner to team", "Activate access only after approval and team assignment."],
-                ["Mark team open", "Release an owner while preserving permanent profile history."],
+                ["Prepare lottery pool", "Approved owners stay unassigned until the lottery is ready."],
+                ["Run team lottery", "Randomize, lock order, and record selections before team access."],
                 ["Suspend or restore access", "Change owner access without deleting records."],
                 ["Official records", "Update career numbers, awards, Hall of Fame status, badges, and notes."],
               ].map(([title, note]) => (
@@ -183,6 +219,19 @@ export default async function CommissionerDashboardPage() {
 
           <article id="team-lottery" className="lg:col-span-2">
             <TeamLotteryPanel season={lotteryData.season} owners={lotteryData.poolOwners} teams={lotteryData.teams} />
+          </article>
+
+          <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
+            <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><ListChecks className="text-electric" /> Recent Commissioner Actions</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              {recentCommissionerActions.map(({ title, note, Icon }) => (
+                <div key={title} className="rounded-md border border-white/10 bg-black/35 p-4">
+                  <Icon className="size-5 text-electric" />
+                  <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-electric">{title}</p>
+                  <p className="mt-2 text-sm leading-6 text-chrome-300">{note}</p>
+                </div>
+              ))}
+            </div>
           </article>
         </section>
 
