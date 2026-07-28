@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ClipboardList, FileText, KeyRound, LockKeyhole, RotateCcw, ShieldCheck, UserRound, Users } from "lucide-react";
+import { ArrowLeft, ClipboardList, FileText, KeyRound, LockKeyhole, RotateCcw, ShieldCheck, UserRound, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,10 @@ export default async function OwnerPortalPage() {
         <Image src="/stadium-hero.png" alt="National Franchise League owner portal" fill priority className="object-cover opacity-45" sizes="100vw" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.72),#05070a)]" />
         <div className="relative mx-auto max-w-7xl">
+          <Link href="/" className="mb-5 inline-flex items-center gap-2 rounded-md border border-white/10 bg-black/45 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-chrome-200 transition hover:border-electric/55 hover:text-white">
+            <ArrowLeft className="size-4 text-electric" />
+            Back to League Home
+          </Link>
           <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-electric">
             <ShieldCheck className="size-4" />
             Owner Portal

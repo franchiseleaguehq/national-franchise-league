@@ -15,7 +15,6 @@ import {
   Gamepad2,
   Gavel,
   HelpCircle,
-  Home,
   ListChecks,
   Menu,
   Radio,
@@ -34,6 +33,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { mainNavigationItems } from "@/lib/navigation";
 import {
   leagueBasics,
   madden27ReviewTopics,
@@ -46,7 +46,6 @@ import {
 } from "./rulebook-data";
 import type { RulebookRule } from "./rulebook-data";
 
-const navItems = ["Home", "Rules", "Teams", "Standings", "Schedule", "Stats", "News", "Media", "Hall of Fame", "Commissioner"];
 const unknownAnswer = "This situation is not specifically covered by the official rulebook. Contact the commissioner for a ruling.";
 
 type Label = "ALLOWED" | "NOT ALLOWED" | "REQUIRED" | "COMMISSIONER DECISION" | "PENALTY";
@@ -631,18 +630,12 @@ export function RulesRulebook() {
         <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 py-2 md:px-8">
           <LeagueLogo />
           <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.16em] text-chrome-200 xl:flex">
-            {navItems.map((item) => (
-              <Link href={item === "Home" ? "/" : `/${item.toLowerCase().replaceAll(" ", "-")}`} key={item} className="transition hover:text-white">
-                {item}
+            {mainNavigationItems.map((item) => (
+              <Link href={item.href} key={item.href} className="transition hover:text-white">
+                {item.label}
               </Link>
             ))}
           </div>
-          <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
-            <Link href="/">
-              <Home className="size-4" />
-              Home
-            </Link>
-          </Button>
         </div>
       </nav>
 

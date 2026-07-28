@@ -1,4 +1,5 @@
 import type { DatabaseSnapshot } from "./schema";
+import { official2026Schedule } from "./official-2026-schedule";
 
 export const db: DatabaseSnapshot = {
   leagues: [
@@ -73,13 +74,7 @@ export const db: DatabaseSnapshot = {
   ownerSeasonHistory: [],
   teamLotteryEntries: [],
   teamLotterySelections: [],
-  games: [
-    { id: "game_1", leagueId: "league_nfl", week: 1, awayTeamId: "dal", homeTeamId: "nyg", status: "scheduled", kickoffAt: "2026-07-08T20:00:00-04:00", streamUrl: "https://www.twitch.tv/nationalfranchiseleague", isGameOfTheWeek: true },
-    { id: "game_2", leagueId: "league_nfl", week: 1, awayTeamId: "phi", homeTeamId: "was", awayScore: 31, homeScore: 28, status: "final", kickoffAt: "2026-07-04T19:30:00-04:00" },
-    { id: "game_3", leagueId: "league_nfl", week: 1, awayTeamId: "buf", homeTeamId: "mia", awayScore: 24, homeScore: 17, status: "final", kickoffAt: "2026-07-05T21:15:00-04:00" },
-    { id: "game_4", leagueId: "league_nfl", week: 1, awayTeamId: "kc", homeTeamId: "lv", awayScore: 35, homeScore: 34, status: "final", kickoffAt: "2026-07-05T22:00:00-04:00" },
-    { id: "game_5", leagueId: "league_nfl", week: 1, awayTeamId: "was", homeTeamId: "nyg", status: "scheduled", kickoffAt: "2026-07-09T19:00:00-04:00" },
-  ],
+  games: official2026Schedule,
   standings: [
     { id: "st_1", leagueId: "league_nfl", teamId: "nyg", wins: 7, losses: 1, ties: 0, pointsFor: 246, pointsAgainst: 160 },
     { id: "st_2", leagueId: "league_nfl", teamId: "dal", wins: 6, losses: 2, ties: 0, pointsFor: 231, pointsAgainst: 177 },

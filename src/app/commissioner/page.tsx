@@ -6,7 +6,8 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCommissionerSession } from "@/lib/auth/session";
 import { getCommissionerSetup } from "@/lib/db/commissioner-store";
-import { applicationStatusLabel, getCommissionerDashboardData, getTeamLotteryData } from "@/lib/db/repositories";
+import { applicationStatusLabel, getCommissionerDashboardData, getCommissionerEditableLeagueData, getTeamLotteryData } from "@/lib/db/repositories";
+import { LeagueEditPanel } from "./league-edit-panel";
 import { OwnerWorkflowPanel } from "./owner-workflow-panel";
 import { TeamLotteryPanel } from "./team-lottery-panel";
 
@@ -38,6 +39,7 @@ export default async function CommissionerDashboardPage() {
   if (!setup || setup.account.ownerId !== session.ownerId) redirect("/commissioner/login");
 
   const data = getCommissionerDashboardData();
+  const editableLeagueData = getCommissionerEditableLeagueData();
   const lotteryData = getTeamLotteryData();
   const formerOwner = data.owners.find((owner) => owner.status === "former");
   const profileHref = `/owners/${setup.owner.slug}`;
@@ -219,6 +221,10 @@ export default async function CommissionerDashboardPage() {
 
           <article id="team-lottery" className="lg:col-span-2">
             <TeamLotteryPanel season={lotteryData.season} owners={lotteryData.poolOwners} teams={lotteryData.teams} />
+          </article>
+
+          <article className="lg:col-span-2">
+            <LeagueEditPanel owners={editableLeagueData.owners} teams={editableLeagueData.teams} games={editableLeagueData.games} />
           </article>
 
           <article className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">

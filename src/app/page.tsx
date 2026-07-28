@@ -5,7 +5,6 @@ import {
   Bell,
   CalendarDays,
   ChevronRight,
-  Crown,
   ExternalLink,
   FileText,
   Instagram,
@@ -26,6 +25,7 @@ import {
 import { BroadcastPlayer, KickoffCountdown } from "@/components/broadcast-live-panel";
 import { Button } from "@/components/ui/button";
 import { getHomeData } from "@/lib/db/repositories";
+import { mainNavigationItems } from "@/lib/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -103,8 +103,6 @@ const footerSocialLinks: SocialLink[] = [
   ["GroupMe", officialLinks.groupMe, Users],
   ["Contact", officialLinks.contact, ExternalLink],
 ];
-
-const navItems = ["Home", "Rules", "Teams", "Standings", "Schedule", "Stats", "News", "Media", "Hall of Fame", "Commissioner"];
 
 const teams: Record<TeamKey, Team> = {
   giants: {
@@ -218,7 +216,6 @@ const gameDay = {
   },
 };
 
-const standings = homeData.standings;
 const leaders = homeData.leaders;
 const scores = homeData.scores;
 const rankings = homeData.rankings;
@@ -472,23 +469,6 @@ function LeagueMediaCenter() {
   );
 }
 
-function MiniTable({ rows }: { rows: string[][] }) {
-  return (
-    <div className="max-h-72 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
-      {rows.map((row) => (
-        <div key={row.join("-")} className="interactive-card rounded-md border border-white/10 bg-black/35 p-2.5">
-          <div className="grid grid-cols-[2rem_1fr_auto_auto] items-center gap-3">
-            <span className="font-[var(--font-oswald)] text-xl font-bold text-electric">{row[0]}</span>
-            <span className="font-semibold text-white">{row[1]}</span>
-            <span className="text-chrome-200">{row[2]}</span>
-            <span className="text-sm font-bold text-electric">{row[3]}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-black pb-14 text-white">
@@ -496,9 +476,9 @@ export default function Home() {
         <div className="mx-auto flex min-h-24 max-w-7xl items-center justify-between gap-5 px-5 py-3 md:px-8">
           <LeagueLogo compact />
           <div className="hidden items-center gap-5 text-xs font-bold uppercase tracking-[0.16em] text-chrome-200 xl:flex">
-            {navItems.map((item) => (
-              <Link href={item === "Home" ? "/" : item === "Media" ? "#media" : `/${item.toLowerCase().replaceAll(" ", "-")}`} key={item} className="relative transition after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-electric after:transition-all hover:text-white hover:after:w-full">
-                {item}
+            {mainNavigationItems.map((item) => (
+              <Link href={item.href} key={item.href} className="relative transition after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-electric after:transition-all hover:text-white hover:after:w-full">
+                {item.label}
               </Link>
             ))}
           </div>
@@ -597,11 +577,6 @@ export default function Home() {
 
         <div className="relative mx-auto grid max-w-7xl gap-6 px-5 md:px-8 xl:grid-cols-3">
           <article className="premium-card scroll-reveal interactive-card rounded-md border border-white/12 p-4 backdrop-blur-xl">
-            <SectionHeader eyebrow="Standings" title="Standings" icon={Trophy} />
-            <MiniTable rows={standings} />
-          </article>
-
-          <article className="premium-card scroll-reveal interactive-card rounded-md border border-white/12 p-4 backdrop-blur-xl">
             <SectionHeader eyebrow="Stats Desk" title="League Leaders" icon={Star} />
             <div className="max-h-72 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {leaders.map(([category, player, team, stat, extra]) => (
@@ -644,8 +619,12 @@ export default function Home() {
           </article>
 
           <article className="premium-card scroll-reveal interactive-card rounded-md border border-white/12 p-4 backdrop-blur-xl">
-            <SectionHeader eyebrow="News" title="League News" icon={Newspaper} />
+            <SectionHeader eyebrow="Weekly Recap" title="Weekly Recap" icon={Newspaper} />
             <div className="max-h-72 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
+              <div className="interactive-card rounded-md border border-electric/25 bg-electric/10 p-3">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-electric">AI Recap Placeholder</p>
+                <p className="mt-2 text-chrome-100">Future weekly Madden recaps will appear here after real league games are completed.</p>
+              </div>
               {newsItems.map(([label, item]) => (
                 <div key={item} className="interactive-card rounded-md border border-white/10 bg-black/35 p-3">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-electric">{label}</p>
@@ -692,19 +671,6 @@ export default function Home() {
                 <div key={move} className="interactive-card rounded-md border border-white/10 bg-black/35 p-3">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-electric">{team}</p>
                   <p className="mt-2 text-chrome-100">{move}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="premium-card scroll-reveal interactive-card rounded-md border border-white/12 p-4 backdrop-blur-xl">
-            <SectionHeader eyebrow="Legacy" title="Hall of Fame Preview" icon={Crown} />
-            <div className="max-h-72 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
-              {["Champions", "Award Winners", "Record Breakers"].map((item) => (
-                <div key={item} className="interactive-card rounded-md border border-white/10 bg-black/35 p-4">
-                  <div className="mb-3 grid size-10 place-items-center rounded-full bg-electric text-black shadow-electric"><Crown className="size-5" /></div>
-                  <h3 className="font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">{item}</h3>
-                  <p className="mt-3 leading-7 text-chrome-300">Premium Madden franchise history under the National Franchise League umbrella.</p>
                 </div>
               ))}
             </div>

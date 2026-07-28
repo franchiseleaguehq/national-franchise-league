@@ -70,7 +70,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Teams",
         short_name: "Teams",
         description: "Open the National Franchise League team hub.",
-        url: "/teams/nyg",
+        url: "/teams",
         icons: [{ src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
       },
       {

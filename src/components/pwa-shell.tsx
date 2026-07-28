@@ -31,7 +31,7 @@ type DeviceMode = "ios" | "android" | "desktop";
 const mobileNavItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/rules", label: "Rules", icon: FileText },
-  { href: "/teams/nyg", label: "Teams", icon: Shield },
+  { href: "/teams", label: "Teams", icon: Shield },
   { href: "/commissioner", label: "Commish", icon: LockKeyhole },
 ];
 

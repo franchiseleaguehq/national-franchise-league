@@ -2,7 +2,7 @@ import { db } from "./seed";
 import { listRuntimeApplications } from "./applications";
 import { getCommissionerSetupSync } from "./commissioner-store";
 import { leagueFeatures } from "@/lib/features";
-import type { ApplicationStatus, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
+import type { ApplicationStatus, GameRecord, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
 
 const leagueId = "league_nfl";
 const unassignedTeam: TeamRecord = {
@@ -26,6 +26,23 @@ function teamName(teamId: string) {
 function teamRecord(teamId: string) {
   const standing = db.standings.find((row) => row.teamId === teamId);
   return standing ? `${standing.wins}-${standing.losses}` : "0-0";
+}
+
+function teamOwner(teamId: string) {
+  const team = leagueTeams().find((item) => item.id === teamId);
+  return team?.ownerId ? leagueOwners().find((owner) => owner.id === team.ownerId) : undefined;
+}
+
+function scheduleStatusLabel(status: GameRecord["status"]) {
+  const labels: Record<GameRecord["status"], string> = {
+    unscheduled: "Unscheduled",
+    scheduled: "Scheduled",
+    live: "Scheduled",
+    final: "Final",
+    force_win: "Force Win",
+    sim: "Sim",
+  };
+  return labels[status];
 }
 
 function setupOwner() {
@@ -132,11 +149,11 @@ export function getHomeData() {
     owners: leagueOwners().filter((owner) => owner.leagueId === league.id),
     standings,
     leaders,
-    schedule: games.map((game) => [
-      new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(new Date(game.kickoffAt)),
+    schedule: games.filter((game) => game.week === league.week).map((game) => [
+      game.nflScheduleLabel?.split(",")[0] ?? new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(new Date(game.kickoffAt)),
       teamName(game.homeTeamId),
       teamName(game.awayTeamId),
-      new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(game.kickoffAt)),
+      game.kickoffTime ?? new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(game.kickoffAt)),
     ]),
     scores: games
       .filter((game) => game.status === "final")
@@ -184,6 +201,56 @@ export function getCommissionerDashboardData() {
     ownerSeasonHistory: db.ownerSeasonHistory.filter((history) => history.leagueId === league.id),
     games: db.games.filter((game) => game.leagueId === league.id),
     rules: db.rules.filter((rule) => rule.leagueId === league.id).sort((a, b) => a.order - b.order),
+  };
+}
+
+export function getScheduleData() {
+  const league = getLeague();
+  const teams = leagueTeams().filter((team) => team.leagueId === league.id);
+  const owners = leagueOwners().filter((owner) => owner.leagueId === league.id);
+  const ownerByTeam = new Map(teams.map((team) => [team.id, team.ownerId ? owners.find((owner) => owner.id === team.ownerId) : undefined]));
+
+  return {
+    league,
+    weeks: Array.from({ length: 18 }, (_, index) => index + 1).map((week) => ({
+      week,
+      games: db.games
+        .filter((game) => game.leagueId === league.id && game.week === week)
+        .map((game) => ({
+          ...game,
+          awayTeam: teams.find((team) => team.id === game.awayTeamId),
+          homeTeam: teams.find((team) => team.id === game.homeTeamId),
+          awayOwner: ownerByTeam.get(game.awayTeamId),
+          homeOwner: ownerByTeam.get(game.homeTeamId),
+          statusLabel: scheduleStatusLabel(game.status),
+        })),
+    })),
+  };
+}
+
+export function getTeamsDirectoryData() {
+  const league = getLeague();
+  return getOwnerDirectory().map((entry) => ({
+    ...entry,
+    ownerName: entry.owner?.name ?? "Available",
+    gamertag: entry.owner?.gamertag ?? "Available",
+  }));
+}
+
+export function getCommissionerEditableLeagueData() {
+  const owners = leagueOwners().filter((owner) => owner.leagueId === leagueId);
+  return {
+    owners,
+    teams: leagueTeams().filter((team) => team.leagueId === leagueId).map((team) => ({
+      ...team,
+      owner: teamOwner(team.id),
+    })),
+    games: db.games.filter((game) => game.leagueId === leagueId).slice(0, 32).map((game) => ({
+      ...game,
+      awayTeam: teamName(game.awayTeamId),
+      homeTeam: teamName(game.homeTeamId),
+      statusLabel: scheduleStatusLabel(game.status),
+    })),
   };
 }
 

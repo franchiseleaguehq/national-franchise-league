@@ -202,8 +202,11 @@ export type GameRecord = {
   homeTeamId: ID;
   awayScore?: number;
   homeScore?: number;
-  status: "scheduled" | "live" | "final";
+  status: "unscheduled" | "scheduled" | "live" | "final" | "force_win" | "sim";
   kickoffAt: string;
+  nflScheduleLabel?: string;
+  kickoffTime?: string;
+  network?: string;
   streamUrl?: string;
   isGameOfTheWeek?: boolean;
 };
