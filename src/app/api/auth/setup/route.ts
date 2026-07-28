@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { redirectUrl } from "@/lib/auth/redirect-url";
 import { setCommissionerSession } from "@/lib/auth/session";
 import { createCommissionerSetup } from "@/lib/db/commissioner-store";
 import type { OwnerRecord } from "@/lib/db/schema";
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
   const allowedPlatforms: OwnerRecord["preferredPlatform"][] = ["YouTube", "Twitch", "Kick", "None"];
 
   if (!email || !password || !displayName || !gamertag || !bio || !timezone || password !== confirmPassword || password.length < 12 || !allowedPlatforms.includes(preferredPlatform) || !isValidUrl(avatarSrc) || !isValidUrl(youtubeUrl) || !isValidUrl(kickUrl)) {
-    return NextResponse.redirect(new URL("/commissioner/setup?error=1", request.url), { status: 303 });
+    return NextResponse.redirect(redirectUrl(request, "/commissioner/setup?error=1"), { status: 303 });
   }
 
   const result = await createCommissionerSetup({
@@ -54,9 +55,9 @@ export async function POST(request: Request) {
   });
 
   if (!result.ok) {
-    return NextResponse.redirect(new URL("/commissioner/login", request.url), { status: 303 });
+    return NextResponse.redirect(redirectUrl(request, "/commissioner/login"), { status: 303 });
   }
 
   await setCommissionerSession(result.setup.account.ownerId);
-  return NextResponse.redirect(new URL("/commissioner", request.url), { status: 303 });
+  return NextResponse.redirect(redirectUrl(request, "/commissioner"), { status: 303 });
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { redirectUrl } from "@/lib/auth/redirect-url";
 import { setCommissionerSession } from "@/lib/auth/session";
 import { verifyCommissionerCredentials } from "@/lib/db/commissioner-store";
 
@@ -32,14 +33,14 @@ export async function POST(request: Request) {
   const password = String(formData.get("password") ?? "");
 
   if (isRateLimited(request)) {
-    return NextResponse.redirect(new URL("/commissioner/login?error=1", request.url), { status: 303 });
+    return NextResponse.redirect(redirectUrl(request, "/commissioner/login?error=1"), { status: 303 });
   }
 
   const setup = await verifyCommissionerCredentials(email, password);
   if (!setup) {
-    return NextResponse.redirect(new URL("/commissioner/login?error=1", request.url), { status: 303 });
+    return NextResponse.redirect(redirectUrl(request, "/commissioner/login?error=1"), { status: 303 });
   }
 
   await setCommissionerSession(setup.account.ownerId);
-  return NextResponse.redirect(new URL("/commissioner", request.url), { status: 303 });
+  return NextResponse.redirect(redirectUrl(request, "/commissioner"), { status: 303 });
 }
