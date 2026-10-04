@@ -82,8 +82,10 @@ function leagueTeams() {
   return db.teams.map((team) => {
     const selectedOwnerId = selectedTeams[team.id];
     if (selectedOwnerId) return { ...team, ownerId: selectedOwnerId, isOpen: false };
-    if (!owner?.teamId || team.id !== owner.teamId) return team;
-    return { ...team, ownerId: owner.id, isOpen: false };
+    if (owner?.teamId && team.id === owner.teamId) return { ...team, ownerId: owner.id, isOpen: false };
+    const holder = db.owners.find((candidate) => candidate.teamId === team.id && candidate.status !== "former" && candidate.status !== "banned" && candidate.status !== "suspended" && candidate.status !== "inactive");
+    if (holder) return { ...team, ownerId: holder.id, isOpen: false };
+    return team;
   });
 }
 
