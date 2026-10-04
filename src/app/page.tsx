@@ -578,7 +578,8 @@ export default function Home() {
               Competitive PlayStation 5 owners, real NFL teams, broadcast-ready game nights, commissioner tools, highlights, and league storytelling under one professional Madden network.
             </p>
 
-            <div className="mt-6 grid max-w-2xl gap-3 sm:grid-cols-3">
+            <div className="mt-6 grid max-w-2xl gap-3 sm:grid-cols-2">
+              <PremiumButton href="/apply" icon={Users} variant="electric">Join the League</PremiumButton>
               <PremiumButton href="/schedule" icon={CalendarDays} variant="electric">View Schedule</PremiumButton>
               <PremiumButton href="/rules" icon={FileText}>League Rules</PremiumButton>
               <PremiumButton href="/owner-portal" icon={Users} variant="electric">Owner Portal</PremiumButton>

@@ -48,6 +48,11 @@ export function PublicHeader() {
 
         <div className="flex items-center gap-3">
           <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
+            <Link href="/apply">
+              Join the League
+            </Link>
+          </Button>
+          <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
             <Link href={twitchHref} target="_blank" rel="noreferrer">
               <Radio className="size-4" />
               Live
@@ -69,6 +74,13 @@ export function PublicHeader() {
       {menuOpen && (
         <div className="border-t border-white/10 bg-black/85 backdrop-blur-2xl xl:hidden">
           <div className="mx-auto flex max-w-7xl flex-col px-5 py-3 md:px-8">
+            <Link
+              href="/apply"
+              onClick={() => setMenuOpen(false)}
+              className="mb-2 rounded-md bg-electric px-4 py-3 text-center text-sm font-bold uppercase tracking-[0.16em] text-black transition hover:brightness-110"
+            >
+              Join the League
+            </Link>
             {mainNavigationItems.map((item) => (
               <Link
                 href={item.href}
