@@ -43,7 +43,7 @@ export default function ApplyPage() {
             <Button asChild variant="chrome">
               <Link href="/owners#open-teams">
                 <Users className="size-4" />
-                View Lottery Teams
+                View Open Teams
               </Link>
             </Button>
           </div>
@@ -55,7 +55,7 @@ export default function ApplyPage() {
           <ShieldCheck className="size-8 text-electric" />
           <h2 className="mt-4 font-[var(--font-oswald)] text-3xl font-bold uppercase">Application Desk</h2>
           <p className="mt-3 text-sm leading-6 text-chrome-300">
-            {openTeams} teams are available for the lottery. Commissioner approval adds owners to the lottery pool; it does not assign or reserve a team.
+            {openTeams} of 32 teams are still open. Pick the team you are claiming this season — commissioner approval creates your owner profile, and the league tracks your stats and legacy from official game data.
           </p>
         </aside>
         <article className="rounded-md border border-white/12 bg-black/62 p-5 shadow-chrome">

@@ -10,7 +10,7 @@ type WorkflowApplication = {
   preferredDisplayName: string;
   gamertag: string;
   email: string;
-  teamPreferenceNotes: string;
+  preferredTeam: string;
   status: string;
 };
 
@@ -64,7 +64,7 @@ export function OwnerWorkflowPanel({ applications, formerOwner }: { applications
           <p className="mt-2 font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">{selectedApplication?.preferredDisplayName ?? "No Pending Applicant"}</p>
             <p className="mt-1 text-sm text-chrome-300">{selectedApplication?.gamertag ?? "Submit an application to populate this panel."}</p>
             <p className="mt-1 text-sm text-chrome-300">{selectedApplication?.email ?? "Private email only visible inside Commissioner Hub."}</p>
-            <p className="mt-2 text-sm leading-6 text-chrome-300">Reference preferences: {selectedApplication?.teamPreferenceNotes ?? "None submitted."}</p>
+            <p className="mt-2 text-sm leading-6 text-chrome-300">Claiming: {selectedApplication?.preferredTeam ?? "No team selected."}</p>
             <div className="mt-4 rounded-md border border-white/10 bg-black/35 p-3">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">Current Rule</p>
               <p className="mt-2 text-sm leading-6 text-chrome-300">Applicants cannot approve themselves, select teams early, reserve teams, or edit official league records.</p>

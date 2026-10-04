@@ -96,27 +96,42 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
       </div>
 
       <div className="rounded-md border border-electric/25 bg-electric/10 p-4 text-sm leading-6 text-chrome-200">
-        All approved owners start unassigned with Team Selection Status: Awaiting Lottery. All {teams.length} teams stay lottery-controlled until selected. Team preferences are reference notes only and do not reserve, guarantee, or assign a team.
+        Pick the team you are claiming for this Madden season. Your application goes to the commissioner for approval, and your stats and legacy are tracked by the league from official game data.
       </div>
 
-      <TextArea label="Team preferences for reference only" name="teamPreferenceNotes" placeholder="Optional: list teams you are interested in. This does not reserve or guarantee a team." />
-      <TextArea label="Backup team preferences for reference only" name="backupTeamChoices" placeholder="Optional: list other teams you would consider. Lottery order controls actual selection." />
+      <label className="grid gap-2 text-sm font-bold text-chrome-200">
+        Your team
+        <select name="preferredTeamId" required defaultValue="" className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
+          <option value="" disabled>Select your team</option>
+          {teams.map((team) => (
+            <option key={team.id} value={team.id} disabled={!team.isOpen}>
+              {team.label}{team.isOpen ? "" : " — claimed"}
+            </option>
+          ))}
+        </select>
+        <span className="text-xs font-normal leading-5 text-chrome-400">The team you will run this season. Claimed teams are locked.</span>
+      </label>
+
       <TextArea label="Madden league experience" name="maddenLeagueExperience" placeholder="Tell us about leagues you have played in." />
       <TextArea label="Availability" name="availability" placeholder="Best days and times to schedule games." />
+      <TextArea label="Owner bio" name="bio" placeholder="A few lines about you for your public owner profile." />
 
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="YouTube channel optional" name="youtubeUrl" type="url" required={false} placeholder="https://youtube.com/..." />
         <Field label="Twitch channel optional" name="twitchChannel" required={false} placeholder="channel name" />
       </div>
 
-      <label className="grid gap-2 text-sm font-bold text-chrome-200">
-        Preferred streaming platform
-        <select name="preferredPlatform" required defaultValue="None" className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
-          <option value="None">None</option>
-          <option value="YouTube">YouTube</option>
-          <option value="Twitch">Twitch</option>
-        </select>
-      </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Instagram optional" name="instagramHandle" required={false} placeholder="@yourhandle" />
+        <label className="grid gap-2 text-sm font-bold text-chrome-200">
+          Preferred streaming platform
+          <select name="preferredPlatform" required defaultValue="None" className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
+            <option value="None">None</option>
+            <option value="YouTube">YouTube</option>
+            <option value="Twitch">Twitch</option>
+          </select>
+        </label>
+      </div>
 
       <TextArea label="Why do you want to join?" name="whyJoin" placeholder="What kind of owner will you be?" />
 

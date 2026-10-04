@@ -10,7 +10,7 @@ function readString(formData: FormData, key: string) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "teamPreferenceNotes", "backupTeamChoices", "maddenLeagueExperience", "availability", "whyJoin"];
+  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "preferredTeamId", "maddenLeagueExperience", "availability", "bio", "whyJoin"];
   const missingFields = requiredFields.filter((field) => !readString(formData, field));
   const readOrientation = formData.get("readOrientation") === "on";
   const agreeRulebook = formData.get("agreeRulebook") === "on";
@@ -36,14 +36,17 @@ export async function POST(request: Request) {
     email: readString(formData, "email"),
     phone: readString(formData, "phone") || undefined,
     timezone: readString(formData, "timezone"),
+    preferredTeamId: readString(formData, "preferredTeamId") || undefined,
     teamPreferenceNotes: readString(formData, "teamPreferenceNotes"),
     backupTeamChoices: readString(formData, "backupTeamChoices"),
     maddenLeagueExperience: readString(formData, "maddenLeagueExperience"),
     availability: readString(formData, "availability"),
     youtubeUrl: readString(formData, "youtubeUrl") || undefined,
     twitchChannel: readString(formData, "twitchChannel") || undefined,
+    instagramHandle: readString(formData, "instagramHandle") || undefined,
     preferredPlatform: (readString(formData, "preferredPlatform") || "None") as "YouTube" | "Twitch" | "None",
     whyJoin: readString(formData, "whyJoin"),
+    bio: readString(formData, "bio") || undefined,
     readOrientation,
     agreeRulebook,
     status: "pending_commissioner_review",

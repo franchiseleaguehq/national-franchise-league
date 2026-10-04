@@ -112,8 +112,10 @@ export type ApplicationRecord = {
   availability: string;
   youtubeUrl?: string;
   twitchChannel?: string;
+  instagramHandle?: string;
   preferredPlatform: "YouTube" | "Twitch" | "None";
   whyJoin: string;
+  bio?: string;
   readOrientation: boolean;
   agreeRulebook: boolean;
   status: ApplicationStatus;

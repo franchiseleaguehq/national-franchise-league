@@ -194,13 +194,13 @@ export default async function CommissionerDashboardPage() {
                 <div key={application.id} className="rounded-md border border-white/10 bg-black/35 p-4">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-electric">{applicationStatusLabel(application.status)}</p>
                   <p className="mt-2 font-bold text-white">{application.preferredDisplayName} | {application.gamertag}</p>
-                  <p className="mt-1 text-sm text-chrome-300">{application.fullName} | {application.email}</p>
-                  <p className="mt-1 text-sm text-chrome-300">Team preferences: {application.teamPreferenceNotes}</p>
-                  <p className="mt-1 text-sm font-bold text-electric">Team Selection Status: Awaiting Lottery</p>
+                  <p className="mt-1 text-sm text-chrome-300">{application.fullName} | {application.email} | {application.timezone}</p>
+                  <p className="mt-1 text-sm text-chrome-300">Claiming: {data.teams.find((team) => team.id === application.preferredTeamId)?.fullName ?? "No team selected"}{application.instagramHandle ? ` | IG: ${application.instagramHandle}` : ""}</p>
+                  {application.bio ? <p className="mt-1 text-sm text-chrome-300">Bio: {application.bio}</p> : null}
                   <p className="mt-2 text-sm leading-6 text-chrome-400">{application.reviewerNote ?? application.whyJoin}</p>
                 </div>
               )) : (
-                <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No applications submitted in this server session.</div>
+                <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No applications yet. New signups appear here.</div>
               )}
             </div>
           </article>
@@ -212,7 +212,7 @@ export default async function CommissionerDashboardPage() {
                 preferredDisplayName: application.preferredDisplayName,
                 gamertag: application.gamertag,
                 email: application.email,
-                teamPreferenceNotes: application.teamPreferenceNotes,
+                preferredTeam: data.teams.find((team) => team.id === application.preferredTeamId)?.fullName ?? "No team selected",
                 status: application.status,
               }))}
               formerOwner={formerOwner ? { id: formerOwner.id, name: formerOwner.name, slug: formerOwner.slug, status: formerOwner.status, teamId: formerOwner.teamId, pastTeamIds: formerOwner.pastTeamIds } : undefined}
