@@ -10,6 +10,7 @@ import { applicationStatusLabel, getCommissionerDashboardData, getCommissionerEd
 import { LeagueEditPanel } from "./league-edit-panel";
 import { OwnerWorkflowPanel } from "./owner-workflow-panel";
 import { TeamLotteryPanel } from "./team-lottery-panel";
+import { ApplicationReviewActions } from "./application-review-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -187,7 +188,7 @@ export default async function CommissionerDashboardPage() {
           <article id="applications" className="premium-card rounded-md border border-white/12 p-5 shadow-chrome backdrop-blur-xl lg:col-span-2">
             <h2 className="flex items-center gap-2 font-[var(--font-oswald)] text-3xl font-bold uppercase text-white"><Bell className="text-electric" /> Application Inbox</h2>
             <p className="mt-3 text-sm leading-6 text-chrome-300">
-              Applications are private to the commissioner area. Submitted applications remain pending until the commissioner reviews them; approval alone does not assign a team.
+              Applications are private to the commissioner area. Submitted applications remain pending until the commissioner reviews them; approving an application creates the owner&apos;s profile and locks their team. Nobody gets a profile without commissioner approval.
             </p>
             <div className="mt-4 grid gap-2">
               {data.applications.length > 0 ? data.applications.map((application) => (
@@ -198,6 +199,7 @@ export default async function CommissionerDashboardPage() {
                   <p className="mt-1 text-sm text-chrome-300">Claiming: {data.teams.find((team) => team.id === application.preferredTeamId)?.fullName ?? "No team selected"}{application.instagramHandle ? ` | IG: ${application.instagramHandle}` : ""}</p>
                   {application.bio ? <p className="mt-1 text-sm text-chrome-300">Bio: {application.bio}</p> : null}
                   <p className="mt-2 text-sm leading-6 text-chrome-400">{application.reviewerNote ?? application.whyJoin}</p>
+                  <ApplicationReviewActions applicationId={application.id} status={application.status} />
                 </div>
               )) : (
                 <div className="rounded-md border border-white/10 bg-black/35 p-4 text-sm text-chrome-300">No applications yet. New signups appear here.</div>

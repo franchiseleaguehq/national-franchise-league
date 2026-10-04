@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { ClipboardList, FileText, ShieldCheck, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getApplicationTeams } from "@/lib/db/repositories";
+import { getApplicationTeamsAsync } from "@/lib/db/repositories";
 import { ApplicationForm } from "./application-form";
 
 export const metadata: Metadata = {
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function ApplyPage() {
-  const teams = getApplicationTeams();
+export default async function ApplyPage() {
+  const teams = await getApplicationTeamsAsync();
   const openTeams = teams.filter((team) => team.isOpen).length;
 
   return (

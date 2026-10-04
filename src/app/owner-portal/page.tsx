@@ -5,7 +5,7 @@ import { ArrowLeft, ClipboardList, FileText, KeyRound, LockKeyhole, RotateCcw, S
 import type { LucideIcon } from "lucide-react";
 
 import { getCommissionerSetup } from "@/lib/db/commissioner-store";
-import { getOwnerDirectory, getUnassignedOwnerProfiles } from "@/lib/db/repositories";
+import { getOwnerDirectoryAsync, getUnassignedOwnerProfilesAsync } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
   title: "Owner Portal | National Franchise League",
@@ -35,8 +35,8 @@ function PortalAction({ href, icon: Icon, title, note, primary = false }: { href
 
 export default async function OwnerPortalPage() {
   await getCommissionerSetup();
-  const directory = getOwnerDirectory();
-  const unassignedOwners = getUnassignedOwnerProfiles();
+  const directory = await getOwnerDirectoryAsync();
+  const unassignedOwners = await getUnassignedOwnerProfilesAsync();
   const openTeams = directory.filter((entry) => !entry.owner).length;
   const activeOwners = directory.filter((entry) => entry.owner).length + unassignedOwners.length;
 

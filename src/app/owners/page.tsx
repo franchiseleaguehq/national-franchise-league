@@ -5,7 +5,7 @@ import { Radio, Shield, Trophy, UserRound, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSetup } from "@/lib/db/commissioner-store";
-import { getOwnerDirectory, getUnassignedOwnerProfiles, ownerStatusLabel } from "@/lib/db/repositories";
+import { getOwnerDirectoryAsync, getUnassignedOwnerProfilesAsync, ownerStatusLabel } from "@/lib/db/repositories";
 
 export const metadata: Metadata = {
   title: "Owner Portal | National Franchise League",
@@ -27,8 +27,8 @@ function TeamMark({ abbreviation, primaryColor, secondaryColor }: { abbreviation
 
 export default async function OwnersPage() {
   await getCommissionerSetup();
-  const directory = getOwnerDirectory();
-  const unassignedOwners = getUnassignedOwnerProfiles();
+  const directory = await getOwnerDirectoryAsync();
+  const unassignedOwners = await getUnassignedOwnerProfilesAsync();
   const openTeams = directory.filter((entry) => !entry.owner);
   const activeProfileCount = directory.filter((entry) => entry.owner).length + unassignedOwners.length;
 

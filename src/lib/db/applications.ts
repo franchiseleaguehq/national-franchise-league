@@ -3,6 +3,13 @@ import "server-only";
 import type { ApplicationRecord } from "./schema";
 
 const applicationsKey = "nfl:applications";
+const applicationDecisionsKey = "nfl:application_decisions";
+
+export type ApplicationDecision = {
+  status: "approved" | "rejected";
+  decidedAt: string;
+  decidedBy: string;
+};
 
 const globalApplications = globalThis as typeof globalThis & {
   nflOwnerApplications?: ApplicationRecord[];
@@ -72,10 +79,13 @@ export async function listStoredApplications(): Promise<ApplicationRecord[]> {
     const raw = await kvCommand<string[]>(["LRANGE", applicationsKey, "0", "-1"]);
     if (!raw) return [];
     const items = Array.isArray(raw) ? raw : [raw];
+    const decisions = await listApplicationDecisions();
     return items
       .map((entry) => {
         try {
-          return JSON.parse(typeof entry === "string" ? entry : JSON.stringify(entry)) as ApplicationRecord;
+          const record = JSON.parse(typeof entry === "string" ? entry : JSON.stringify(entry)) as ApplicationRecord;
+          const decision = decisions[record.id];
+          return decision ? { ...record, status: decision.status } : record;
         } catch {
           return null;
         }
@@ -84,5 +94,47 @@ export async function listStoredApplications(): Promise<ApplicationRecord[]> {
   } catch (error) {
     console.error("Failed to read owner applications from durable storage.", error);
     return [];
+  }
+}
+
+export async function recordApplicationDecision(id: string, status: ApplicationDecision["status"], decidedBy: string) {
+  const decision: ApplicationDecision = { status, decidedAt: new Date().toISOString(), decidedBy };
+
+  const runtime = listRuntimeApplications().find((application) => application.id === id);
+  if (runtime) runtime.status = status;
+
+  if (durableStoreConfig()) {
+    try {
+      await kvCommand<unknown>(["HSET", applicationDecisionsKey, id, JSON.stringify(decision)]);
+    } catch (error) {
+      console.error("Failed to persist application decision to durable storage.", error);
+      throw error;
+    }
+  }
+
+  return decision;
+}
+
+export async function listApplicationDecisions(): Promise<Record<string, ApplicationDecision>> {
+  if (!durableStoreConfig()) return {};
+
+  try {
+    const raw = await kvCommand<Record<string, string>>(["HGETALL", applicationDecisionsKey]);
+    if (!raw || typeof raw !== "object") return {};
+    const decisions: Record<string, ApplicationDecision> = {};
+    for (const [id, value] of Object.entries(raw)) {
+      try {
+        const parsed = JSON.parse(value) as ApplicationDecision;
+        if (parsed && (parsed.status === "approved" || parsed.status === "rejected")) {
+          decisions[id] = parsed;
+        }
+      } catch {
+        // ignore malformed entries
+      }
+    }
+    return decisions;
+  } catch (error) {
+    console.error("Failed to read application decisions from durable storage.", error);
+    return {};
   }
 }

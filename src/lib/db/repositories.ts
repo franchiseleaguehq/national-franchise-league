@@ -1,5 +1,6 @@
 import { db } from "./seed";
 import { listRuntimeApplications, listStoredApplications } from "./applications";
+import { listRuntimeOwners, listStoredOwners } from "./owners-store";
 import { getCommissionerSetupSync } from "./commissioner-store";
 import { leagueFeatures } from "@/lib/features";
 import type { ApplicationStatus, GameRecord, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
@@ -72,7 +73,7 @@ function leagueOwners() {
   return owner ? [owner, ...db.owners] : db.owners;
 }
 
-function leagueTeams() {
+function leagueTeamsWith(owners: OwnerRecord[]) {
   const owner = setupOwner();
   const selectedTeams = db.teamLotterySelections.reduce<Record<string, string>>((acc, selection) => {
     acc[selection.teamId] = selection.ownerId;
@@ -83,10 +84,28 @@ function leagueTeams() {
     const selectedOwnerId = selectedTeams[team.id];
     if (selectedOwnerId) return { ...team, ownerId: selectedOwnerId, isOpen: false };
     if (owner?.teamId && team.id === owner.teamId) return { ...team, ownerId: owner.id, isOpen: false };
-    const holder = db.owners.find((candidate) => candidate.teamId === team.id && candidate.status !== "former" && candidate.status !== "banned" && candidate.status !== "suspended" && candidate.status !== "inactive");
+    const holder = owners.find((candidate) => candidate.teamId === team.id && candidate.status !== "former" && candidate.status !== "banned" && candidate.status !== "suspended" && candidate.status !== "inactive");
     if (holder) return { ...team, ownerId: holder.id, isOpen: false };
     return team;
   });
+}
+
+function leagueTeams() {
+  return leagueTeamsWith(db.owners);
+}
+
+/** All owners: seed + commissioner setup owner + KV-approved owners (durable). */
+async function mergedOwners(): Promise<OwnerRecord[]> {
+  const setup = setupOwner();
+  const base = setup ? [setup, ...db.owners] : db.owners;
+  const seen = new Set(base.map((owner) => owner.id));
+  let stored: OwnerRecord[] = [];
+  try {
+    stored = [...listRuntimeOwners(), ...(await listStoredOwners())];
+  } catch (error) {
+    console.error("Failed to merge stored owners.", error);
+  }
+  return [...base, ...stored.filter((owner) => !seen.has(owner.id) && owner.leagueId === leagueId)];
 }
 
 function leagueMemberships() {
@@ -274,14 +293,14 @@ export function getOwnerProfile(ownerId: string) {
   };
 }
 
-export function getOwnerDirectory() {
+function buildOwnerDirectory(owners: OwnerRecord[], teams: TeamRecord[]) {
   const league = getLeague();
-  const owners = leagueOwners().filter((owner) => owner.leagueId === league.id);
+  const leagueOwnersFiltered = owners.filter((owner) => owner.leagueId === league.id);
 
-  return leagueTeams()
+  return teams
     .filter((team) => team.leagueId === league.id)
     .map((team) => {
-      const owner = team.ownerId ? owners.find((item) => item.id === team.ownerId) : undefined;
+      const owner = team.ownerId ? leagueOwnersFiltered.find((item) => item.id === team.ownerId) : undefined;
       const achievements = owner ? db.ownerAchievements.filter((achievement) => owner.achievementIds.includes(achievement.id)) : [];
       return {
         team,
@@ -290,6 +309,15 @@ export function getOwnerDirectory() {
         profileSlug: owner?.slug ?? `open-${team.slug}`,
       };
     });
+}
+
+export function getOwnerDirectory() {
+  return buildOwnerDirectory(leagueOwners(), leagueTeams());
+}
+
+export async function getOwnerDirectoryAsync() {
+  const owners = await mergedOwners();
+  return buildOwnerDirectory(owners, leagueTeamsWith(owners));
 }
 
 export function getOwnerPortalProfile(slug: string) {
@@ -324,8 +352,20 @@ export function getApplicationTeams() {
   }));
 }
 
+export async function getApplicationTeamsAsync() {
+  return (await getOwnerDirectoryAsync()).map(({ team, owner }) => ({
+    id: team.id,
+    label: team.fullName,
+    isOpen: !owner,
+  }));
+}
+
 export function getUnassignedOwnerProfiles() {
   return leagueOwners().filter((owner) => owner.leagueId === leagueId && !owner.teamId);
+}
+
+export async function getUnassignedOwnerProfilesAsync() {
+  return (await mergedOwners()).filter((owner) => owner.leagueId === leagueId && !owner.teamId);
 }
 
 export function getTeamLotteryData() {
