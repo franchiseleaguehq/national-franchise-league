@@ -68,9 +68,23 @@ function visibleTransactions() {
   });
 }
 
+function dedupeOwnersByGamertag(owners: OwnerRecord[]): OwnerRecord[] {
+  // The commissioner setup owner and the seed profile can be the same person
+  // (e.g. Johnny). Prefer the record that holds a team.
+  const byGamertag = new Map<string, OwnerRecord>();
+  for (const owner of owners) {
+    const key = owner.gamertag.trim().toLowerCase();
+    const existing = byGamertag.get(key);
+    if (!existing || (!existing.teamId && owner.teamId)) {
+      byGamertag.set(key, owner);
+    }
+  }
+  return [...byGamertag.values()];
+}
+
 function leagueOwners() {
   const owner = setupOwner();
-  return owner ? [owner, ...db.owners] : db.owners;
+  return dedupeOwnersByGamertag(owner ? [owner, ...db.owners] : db.owners);
 }
 
 function leagueTeamsWith(owners: OwnerRecord[]) {
@@ -105,7 +119,8 @@ async function mergedOwners(): Promise<OwnerRecord[]> {
   } catch (error) {
     console.error("Failed to merge stored owners.", error);
   }
-  return [...base, ...stored.filter((owner) => !seen.has(owner.id) && owner.leagueId === leagueId)];
+  const all = [...base, ...stored.filter((owner) => !seen.has(owner.id) && owner.leagueId === leagueId)];
+  return dedupeOwnersByGamertag(all);
 }
 
 function leagueMemberships() {
