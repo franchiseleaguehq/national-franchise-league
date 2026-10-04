@@ -10,7 +10,7 @@ function readString(formData: FormData, key: string) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "preferredTeamId", "maddenLeagueExperience", "availability", "bio", "whyJoin"];
+  const requiredFields = ["fullName", "preferredDisplayName", "gamertag", "email", "timezone", "preferredTeamId", "gamingPlatform", "maddenLeagueExperience", "availability", "bio", "whyJoin"];
   const missingFields = requiredFields.filter((field) => !readString(formData, field));
   const readOrientation = formData.get("readOrientation") === "on";
   const agreeRulebook = formData.get("agreeRulebook") === "on";
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
     twitchChannel: readString(formData, "twitchChannel") || undefined,
     instagramHandle: readString(formData, "instagramHandle") || undefined,
     preferredPlatform: (readString(formData, "preferredPlatform") || "None") as "YouTube" | "Twitch" | "None",
+    gamingPlatform: (readString(formData, "gamingPlatform") || undefined) as "PS5" | "Xbox" | "PC" | undefined,
     whyJoin: readString(formData, "whyJoin"),
     bio: readString(formData, "bio") || undefined,
     readOrientation,

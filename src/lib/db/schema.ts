@@ -42,6 +42,7 @@ export type OwnerRecord = {
   discordHandle: string;
   bio: string;
   timezone: string;
+  gamingPlatform?: "PS5" | "Xbox" | "PC";
   avatarSrc?: string;
   preferredPlatform: "YouTube" | "Twitch" | "None";
   twitchChannel?: string;
@@ -114,6 +115,7 @@ export type ApplicationRecord = {
   twitchChannel?: string;
   instagramHandle?: string;
   preferredPlatform: "YouTube" | "Twitch" | "None";
+  gamingPlatform?: "PS5" | "Xbox" | "PC";
   whyJoin: string;
   bio?: string;
   readOrientation: boolean;

@@ -124,6 +124,19 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="Instagram optional" name="instagramHandle" required={false} placeholder="@yourhandle" />
         <label className="grid gap-2 text-sm font-bold text-chrome-200">
+          Your gaming platform
+          <select name="gamingPlatform" required defaultValue="" className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
+            <option value="" disabled>Select platform</option>
+            <option value="PS5">PlayStation 5</option>
+            <option value="Xbox">Xbox Series X|S</option>
+            <option value="PC">PC</option>
+          </select>
+          <span className="text-xs font-normal leading-5 text-chrome-400">Crossplay is on — shown on your public profile.</span>
+        </label>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-bold text-chrome-200">
           Preferred streaming platform
           <select name="preferredPlatform" required defaultValue="None" className="min-h-12 rounded-md border border-white/10 bg-black px-4 text-base text-white outline-none transition focus:border-electric">
             <option value="None">None</option>

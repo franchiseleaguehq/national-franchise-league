@@ -65,7 +65,7 @@ export default async function OwnerProfilePage({ params }: { params: Promise<{ o
                   {isOpen ? "Open Team Profile" : "Owner Profile"}
                 </p>
                 <h1 className="mt-3 font-[var(--font-oswald)] text-5xl font-bold uppercase leading-none md:text-7xl">{owner?.name ?? "Open Team"}</h1>
-                <p className="mt-3 text-lg font-semibold text-chrome-200">{team.fullName} {owner ? `| ${owner.gamertag}` : "| Available"}</p>
+                <p className="mt-3 text-lg font-semibold text-chrome-200">{team.fullName} {owner ? `| ${owner.gamertag}${owner.gamingPlatform ? ` | ${owner.gamingPlatform}` : ""}` : "| Available"}</p>
               </div>
             </div>
             <Button asChild variant={isOpen ? "electric" : "chrome"} size="lg">
