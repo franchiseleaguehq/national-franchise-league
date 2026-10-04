@@ -25,7 +25,7 @@ export const db: DatabaseSnapshot = {
       slug: "fuego",
       leagueId: "league_nfl",
       name: "Fuego",
-      gamertag: "Fuegobravo",
+      gamertag: "FuegoBravo",
       role: "commissioner",
       status: "commissioner",
       teamId: "nyg",
