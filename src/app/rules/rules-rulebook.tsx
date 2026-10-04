@@ -69,129 +69,104 @@ type ChatMessage = {
 
 const categorySpecs: Array<{ title: string; summary: string; icon: LucideIcon; ruleTitles: string[] }> = [
   {
-    title: "Getting Started",
-    summary: "League identity, owner expectations, setup, and communication basics.",
-    icon: BookOpen,
-    ruleTitles: [
-      "Realistic Competition. Integrity. Flexibility for Busy Players.",
-      "💬 Part 4 - Communication",
-    ],
-  },
-  {
-    title: "League Settings",
-    summary: "Core Madden franchise settings every owner should know before kickoff.",
+    title: "Part 1 — Setup & Schedule",
+    summary: "Madden 26. 6-minute quarters. All-Madden sim. Advances run Sun/Wed/Fri — no exceptions.",
     icon: Settings,
-    ruleTitles: ["⚙️ Part 1 — League Setup & Schedule"],
+    ruleTitles: ["⚙️ Part 1 — League Setup & Schedule", "🕒 Scheduling & Sim Policy"],
   },
   {
-    title: "Scheduling and Advances",
-    summary: "Advance timing, 10-hour response windows, force wins, and sim outcomes.",
-    icon: CalendarDays,
-    ruleTitles: ["🕒 Scheduling & Sim Policy", "💬 Part 4 - Communication"],
-  },
-  {
-    title: "Gameplay",
-    summary: "Realistic football standards, exploit prevention, pauses, defense, and game flow.",
-    icon: Gamepad2,
-    ruleTitles: [
-      "⏸️ Part 5 — Pause & In-Game Communication",
-      "🧠 Part 11 — Gameplay Conduct",
-      "🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules",
-    ],
-  },
-  {
-    title: "Fourth Down",
-    summary: "When owners may go for it and when they must punt.",
-    icon: ShieldAlert,
-    ruleTitles: ["🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules"],
-  },
-  {
-    title: "Two-Point Conversions",
-    summary: "When two-point attempts are allowed.",
-    icon: CheckCircle2,
-    ruleTitles: ["🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules"],
-  },
-  {
-    title: "Sportsmanship and Quitting",
-    summary: "Respect standards, no-quitting rules, disconnects, and league conduct.",
-    icon: Users,
-    ruleTitles: [
-      "📖 Part 2 — No Quitting Policy",
-      "\n💪 Part 3 -Sportsmanship & Conduct",
-      "⚡ Part 13-Disconnections",
-    ],
-  },
-  {
-    title: "Streaming and Games of the Week",
-    summary: "Mandatory streaming, Games of the Week, playoff streams, rewards, and highlights.",
-    icon: Radio,
-    ruleTitles: ["📺 Part 6 — Streaming & Game of the Week", "🏟️ Playoff Streaming Rotation:"],
-  },
-  {
-    title: "Trades",
-    summary: "Trade committee approval, trade limits, anti-collusion, and CPU trade restrictions.",
-    icon: Scale,
-    ruleTitles: ["💰 Part 8 — Salary Cap & Trading Rules"],
-  },
-  {
-    title: "Franchise Management and Player Personnel",
-    summary: "Salary cap, team lottery, free agency, season rewards, and editing policy.",
-    icon: ClipboardCheck,
-    ruleTitles: [
-      "💰 Part 8 — Salary Cap & Trading Rules",
-      "🧾 Part 9 — Team Lottery & Free Agency System",
-      "📺 Part 6 — Streaming & Game of the Week",
-      "🧩 Part 10 — Illegal Subs / Roster Rules / Editing",
-    ],
-  },
-  {
-    title: "Rosters and Position Changes",
-    summary: "Illegal substitutions, roster minimums, FB policy, and player editing.",
-    icon: ListChecks,
-    ruleTitles: ["🧩 Part 10 — Illegal Subs / Roster Rules / Editing"],
-  },
-  {
-    title: "Statistics, Development and Breakouts",
-    summary: "CPU stat caps, attribute rewards, development upgrades, and exploit prevention.",
-    icon: Sparkles,
-    ruleTitles: [
-      "🤖 Part 7 — CPU Games & Stat Caps",
-      "📺 Part 6 — Streaming & Game of the Week",
-      "🧠 Part 11 — Gameplay Conduct",
-    ],
-  },
-  {
-    title: "Playoffs",
-    summary: "Playoff streaming rotation and playoff disconnect approvals.",
-    icon: Trophy,
-    ruleTitles: ["🏟️ Playoff Streaming Rotation:", "Playoff Disconnects"],
-  },
-  {
-    title: "Penalties and Discipline",
-    summary: "Strike system, suspensions, attribute reductions, removals, and documented review.",
+    title: "Part 2 — No Quitting",
+    summary: "You never quit. Not ever. Not even down 40.",
     icon: AlertTriangle,
-    ruleTitles: [
-      "📖 Part 2 — No Quitting Policy",
-      "🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules",
-      "🤖 Part 7 — CPU Games & Stat Caps",
-      "💰 Part 8 — Salary Cap & Trading Rules",
-      "⚖️ Part 14 — League Enforcement (3-Strike System)",
-    ],
+    ruleTitles: ["📖 Part 2 — No Quitting Policy"],
   },
   {
-    title: "Commissioner Authority",
-    summary: "Commissioner review, enforcement, league recruiting, and final authority notes.",
+    title: "Part 3 — Sportsmanship",
+    summary: "Play real football. No cheese, no glitches, no running up the score.",
+    icon: Users,
+    ruleTitles: ["💪 Part 3 -Sportsmanship & Conduct"],
+  },
+  {
+    title: "Part 4 — Communication",
+    summary: "GroupMe is home. Answer within 10 hours or risk the force L.",
+    icon: Send,
+    ruleTitles: ["💬 Part 4 - Communication"],
+  },
+  {
+    title: "Part 5 — Pauses",
+    summary: "Two pauses a half. Say something before you unpause.",
+    icon: CheckCircle2,
+    ruleTitles: ["⏸️ Part 5 — Pause & In-Game Communication"],
+  },
+  {
+    title: "Part 6 — Streaming & Game of the Week",
+    summary: "Stream your games. 2 Games of the Week per advance — NFC vs AFC.",
+    icon: Radio,
+    ruleTitles: ["📺 Part 6 — Streaming & Game of the Week"],
+  },
+  {
+    title: "Part 7 — CPU Games & Stat Caps",
+    summary: "Play the CPU straight. Stat caps apply — no padding numbers.",
+    icon: Bot,
+    ruleTitles: ["🤖 Part 7 — CPU Games & Stat Caps"],
+  },
+  {
+    title: "Part 8 — Salary Cap & Trades",
+    summary: "Every trade needs committee approval. No cap games.",
+    icon: Scale,
+    ruleTitles: ["💰 Part 8 — Salary Cap & Trading Rules"],
+  },
+  {
+    title: "Part 9 — Lottery & Free Agency",
+    summary: "New Madden, fresh draft. Last pick gets the first free-agent claim.",
+    icon: ClipboardCheck,
+    ruleTitles: ["🧾 Part 9 — Team Lottery & Free Agency System"],
+  },
+  {
+    title: "Part 10 — Rosters & Editing",
+    summary: "Keep it realistic. No illegal subs, no funny business with edits.",
+    icon: ListChecks,
+    ruleTitles: ["🧩 Part 10 — Illegal Subs / Roster Rules / Editing"],
+  },
+  {
+    title: "Part 11 — Gameplay Conduct",
+    summary: "Mix your coverages. 5-play cooldown on offense, 6 on defense.",
+    icon: Gamepad2,
+    ruleTitles: ["🧠 Part 11 — Gameplay Conduct"],
+  },
+  {
+    title: "Part 12 — Defense & 4th Down",
+    summary: "Blitz all you want (legally). 4th-down rules keep it honest.",
+    icon: ShieldAlert,
+    ruleTitles: ["🛡️ Part 12 — Defense, Goal Line, & 4th Down Rules"],
+  },
+  {
+    title: "Part 13 — Disconnections",
+    summary: "Reboot and replay from the point of disconnect.",
+    icon: X,
+    ruleTitles: ["⚡ Part 13-Disconnections"],
+  },
+  {
+    title: "Part 14 — Enforcement",
+    summary: "4 levels: QB sits → attribute cuts → 3 losses → you're out.",
     icon: Gavel,
-    ruleTitles: [
-      "⚖️ Part 14 — League Enforcement (3-Strike System)",
-      "🤝 League Recruiting:",
-      "⚡ Part 13-Disconnections",
-      "League Standards",
-    ],
+    ruleTitles: ["⚖️ Part 14 — League Enforcement"],
+  },
+  {
+    title: "Playoffs & Rewards",
+    summary: "Win in January, get paid. Streams, persona updates, and glory.",
+    icon: Trophy,
+    ruleTitles: ["🏟️ Playoff Streaming Rotation:", "Playoff Disconnects", "🎭 Persona Engine"],
+  },
+  {
+    title: "League Standards",
+    summary: "What we stand for and how new blood finds us.",
+    icon: BookOpen,
+    ruleTitles: ["League Standards", "🤝 League Recruiting:"],
   },
   {
     title: "FAQ",
-    summary: "Fast answers to the most common owner questions.",
+    summary: "Fast answers to the questions every owner asks.",
     icon: HelpCircle,
     ruleTitles: [
       "Where do owners communicate?",
@@ -618,7 +593,7 @@ export function RulesRulebook() {
               {rulebookMeta.edition}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-chrome-200 md:text-xl">
-              A simpler, mobile-first owner guide backed by the full embedded official rulebook.
+              The League Bible — every rule, in plain English. Tap a section to read the full text.
             </p>
           </div>
         </div>

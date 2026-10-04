@@ -642,7 +642,7 @@ export const rulebookCategories: RulebookCategory[] = [
 export const rulebookQuickStats = [
   ["Version", rulebookMeta.version],
   ["Updated", rulebookMeta.lastUpdated],
-  ["Sections", "17"],
+  ["Sections", "14"],
   ["Official Home", "NFL Website"],
 ];
 
