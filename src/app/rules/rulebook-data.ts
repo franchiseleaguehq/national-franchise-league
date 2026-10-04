@@ -527,7 +527,7 @@ export const rulebookCategories: RulebookCategory[] = [
           "All violations documented by commissioners.",
           "✅ Commission Team",
           "Head Commissioner: Fuegobravo",
-          "Co-Commissioner: Doughstax",
+          "Co-Commissioner: Onthemaybach",
           "Trade Committee: Onthemaybach",
           "🩵 Final Message:",
           "This league is for players who respect the game, study their craft, and compete with integrity.",
