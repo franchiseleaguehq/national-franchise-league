@@ -28,6 +28,15 @@ export type LeagueRecord = {
   instagramUrl: string;
 };
 
+export type OwnerLegacyEntry = {
+  maddenYear: string;
+  teamId: ID;
+  seasons: Array<{ season: number; wins: number; losses: number; ties: number }>;
+  playoffAppearances: number;
+  superBowlAppearances: number;
+  superBowlWins: number;
+};
+
 export type OwnerRecord = {
   id: ID;
   slug: string;
@@ -62,6 +71,7 @@ export type OwnerRecord = {
   accessSuspended: boolean;
   commissionerNotes?: string;
   joinedAt: string;
+  legacy?: OwnerLegacyEntry[];
 };
 
 export type TeamRecord = {

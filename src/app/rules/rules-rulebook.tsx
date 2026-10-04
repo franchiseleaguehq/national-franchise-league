@@ -33,7 +33,7 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   leagueBasics,
-  madden27ReviewTopics,
+  madden26ReviewTopics,
   originalNotionStatements,
   rookieOrientation,
   rulebookCategories,
@@ -229,8 +229,8 @@ const searchBoosts = [
   { terms: ["trade", "cpu trade", "demanded trade", "trade demand"], title: "💰 Part 8 — Salary Cap & Trading Rules" },
   { terms: ["stream", "youtube", "twitch", "playoff game", "game of the week"], title: "📺 Part 6 — Streaming & Game of the Week" },
   { terms: ["stat padding", "stat pad", "quarterback cap", "qb cap", "cpu cap"], title: "🤖 Part 7 — CPU Games & Stat Caps" },
-  { terms: ["holdout", "void years", "franchise tag", "transition tag", "restricted free agency", "guaranteed contract"], title: "Madden NFL 27 Review Required" },
-  { terms: ["coach mode", "persona engine", "emergent actions", "no-trade", "no trade", "wear and tear", "free agent frenzy", "undrafted rookie"], title: "Madden NFL 27 Review Required" },
+  { terms: ["holdout", "void years", "franchise tag", "transition tag", "restricted free agency", "guaranteed contract"], title: "Madden NFL 26 Review Required" },
+  { terms: ["coach mode", "persona engine", "emergent actions", "no-trade", "no trade", "wear and tear", "free agent frenzy", "undrafted rookie"], title: "Madden NFL 26 Review Required" },
   { terms: ["dynamic weather", "weather"], title: "⚙️ Part 1 — League Setup & Schedule" },
   { terms: ["draft-day trades", "draft day trades", "cpu draft"], title: "💰 Part 8 — Salary Cap & Trading Rules" },
   { terms: ["force win", "fair win", "sim gods", "schedule", "respond"], title: "🕒 Scheduling & Sim Policy" },
@@ -301,7 +301,7 @@ function scoreRule(query: string, category: string, rule: RulebookRule) {
   for (const boost of searchBoosts) {
     if (boost.terms.some((term) => query.toLowerCase().includes(term))) {
       if (boost.title === rule.title) score += 8;
-      if (boost.title === "Madden NFL 27 Review Required" && category === "What’s New in Madden 27") score += 6;
+      if (boost.title === "Madden NFL 26 Review Required" && category === "What’s New in Madden 26") score += 6;
     }
   }
 
@@ -315,7 +315,7 @@ function makeAnswer(rule: RulebookRule) {
 }
 
 function makeMaddenReviewRules(): RulebookRule[] {
-  return madden27ReviewTopics.map(([title, note]) => ({
+  return madden26ReviewTopics.map(([title, note]) => ({
     title,
     summary: note,
     content: [note],
@@ -327,8 +327,8 @@ function getSearchResults(query: string, categories: DisplayCategory[]) {
   if (!trimmed) return [];
 
   const maddenCategory: DisplayCategory = {
-    title: "What’s New in Madden 27",
-    summary: "Commissioner-review items for new Madden 27 features.",
+    title: "What’s New in Madden 26",
+    summary: "Commissioner-review items for new Madden 26 features.",
     icon: Sparkles,
     rules: makeMaddenReviewRules(),
   };
@@ -737,14 +737,14 @@ export function RulesRulebook() {
               <section id="madden-27" className="mt-6 scroll-mt-32 rounded-md border border-white/12 bg-black/62 p-4 shadow-chrome md:p-6">
                 <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-electric">
                   <Sparkles className="size-4" />
-                  What&apos;s New in Madden 27
+                  What&apos;s New in Madden 26
                 </p>
                 <h2 className="mt-2 font-[var(--font-oswald)] text-3xl font-bold uppercase leading-none text-white">Commissioner Review Board</h2>
                 <p className="mt-2 text-sm leading-6 text-chrome-300">
                   These items are shown for review. They do not change official gameplay, scheduling, streaming, trade, quitting, fourth-down, two-point, stat-cap, or illegal-position rules unless approved.
                 </p>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {madden27ReviewTopics.map(([title, note]) => (
+                  {madden26ReviewTopics.map(([title, note]) => (
                     <article key={title} className="rounded-md border border-white/10 bg-white/[0.045] p-4">
                       <LabelPill label={/not specifically covered/i.test(note) ? "COMMISSIONER DECISION" : "REQUIRED"} />
                       <h3 className="mt-3 font-[var(--font-oswald)] text-xl font-bold uppercase text-white">{title}</h3>
