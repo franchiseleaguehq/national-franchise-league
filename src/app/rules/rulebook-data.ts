@@ -557,6 +557,15 @@ export const rulebookCategories: RulebookCategory[] = [
         summary: "Playoff disconnects require commissioner approval before restart.",
         content: ["Playoff disconnects require commissioner approval before restart."],
       },
+      {
+        title: "🎭 Persona Engine",
+        summary: "Playoff teams earn one player persona update.",
+        content: [
+          "🎭 Persona Engine",
+          "Only the commissioner can update player personas.",
+          "Any team that makes the playoffs earns one persona update — the owner gives the commissioner their player's update, and the commissioner applies it to their liking.",
+        ],
+      },
     ],
   },
   {
