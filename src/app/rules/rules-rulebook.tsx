@@ -23,12 +23,10 @@ import {
   Send,
   Settings,
   ShieldAlert,
-  ShieldCheck,
   Sparkles,
   Trophy,
   Users,
   X,
-  XCircle,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 

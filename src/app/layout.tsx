@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Oswald } from "next/font/google";
 
 import { PublicHeader } from "@/components/public-header";
 import { PwaShell } from "@/components/pwa-shell";
 
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.national-franchise-league.com"),
@@ -76,7 +65,7 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/splash/iphone-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
         <link rel="apple-touch-startup-image" href="/splash/ipad-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
       </head>
-      <body className={`${inter.variable} ${oswald.variable} font-sans`}>
+      <body className="font-sans">
         <PublicHeader />
         {children}
         <PwaShell />

@@ -229,7 +229,6 @@ export function getScheduleData() {
 }
 
 export function getTeamsDirectoryData() {
-  const league = getLeague();
   return getOwnerDirectory().map((entry) => ({
     ...entry,
     ownerName: entry.owner?.name ?? "Available",

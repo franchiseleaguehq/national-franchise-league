@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Edit3, Shield, Trophy } from "lucide-react";
+import { CalendarDays, Edit3, Shield } from "lucide-react";
 
 import { getScheduleData } from "@/lib/db/repositories";
 

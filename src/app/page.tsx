@@ -14,7 +14,6 @@ import {
   Radio,
   Shield,
   Star,
-  Trophy,
   Twitch,
   Users,
   Youtube,

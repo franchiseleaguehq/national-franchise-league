@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Award, CalendarDays, Clock, Gamepad2, Radio, Shield, Trophy, UserRound, Youtube } from "lucide-react";
+import { Award, CalendarDays, Clock, Radio, Shield, Trophy, UserRound, Youtube } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getCommissionerSetup } from "@/lib/db/commissioner-store";
