@@ -85,15 +85,15 @@ export default async function OwnerPortalPage() {
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-electric">Existing Owner</p>
               <h2 className="mt-2 font-[var(--font-oswald)] text-4xl font-bold uppercase leading-none">Owner Access</h2>
               <p className="mt-3 text-sm leading-6 text-chrome-300">
-                Owner authentication is staged as a future phase. The directory and public profiles are live, while profile editing remains locked until commissioner-approved sign-in is connected.
+                Commissioner sign-in is live. The directory and public profiles are live now, and owner self-service sign-in arrives in a later phase — contact the commissioner to update your profile.
               </p>
             </div>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <PortalAction href="#sign-in-coming-soon" icon={LockKeyhole} title="Sign In" note="Sign In Coming Soon. Active-owner access is not public yet." primary />
+            <PortalAction href="/commissioner/login" icon={LockKeyhole} title="Commissioner Sign In" note="Commissioners sign in here to manage teams, scores, and applications." primary />
             <PortalAction href="/owners" icon={Users} title="View Owner Directory" note="Browse all 32 teams, current owners, and open teams." />
             <PortalAction href="/commissioner/login" icon={UserRound} title="My Profile" note="Sign in as Commissioner after setup to access your linked permanent profile." />
-            <PortalAction href="#reset-password-coming-soon" icon={RotateCcw} title="Reset Password" note="Password reset will activate after owner authentication is approved." />
+            <PortalAction href="#reset-password-coming-soon" icon={RotateCcw} title="Reset Password" note="Need account help? Contact the commissioner. Owner self-service reset arrives with owner sign-in." />
           </div>
         </article>
 
@@ -121,7 +121,7 @@ export default async function OwnerPortalPage() {
 
       <section id="reset-password-coming-soon" className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="rounded-md border border-electric/25 bg-electric/10 p-5 text-sm leading-6 text-chrome-200">
-          <strong className="font-bold text-white">Profile access status:</strong> owner self-editing and password reset are intentionally locked for this preview. Public users can view profiles and apply, but cannot edit owner data, approve applications, or assign teams.
+          <strong className="font-bold text-white">Profile access status:</strong> commissioner sign-in is live. Owner self-service editing and password reset arrive in a later phase — contact the commissioner to update your profile.
         </div>
       </section>
     </main>

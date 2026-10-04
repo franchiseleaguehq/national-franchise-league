@@ -205,11 +205,85 @@ const tickerItems = [
   "💬 Discord owner hub active before every advance",
 ];
 
+function zonedTimeToUtc(
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  timeZone: string,
+) {
+  // Resolve a wall-clock time in `timeZone` to a UTC instant. Date.UTC
+  // normalizes day overflow, so callers can pass day values past month end.
+  const guess = new Date(Date.UTC(year, month - 1, day, hour, minute));
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const asUtc = (d: Date) => {
+    const p = dtf
+      .formatToParts(d)
+      .reduce<Record<string, string>>((acc, part) => {
+        acc[part.type] = part.value;
+        return acc;
+      }, {});
+    return Date.UTC(
+      Number(p.year),
+      Number(p.month) - 1,
+      Number(p.day),
+      Number(p.hour) % 24,
+      Number(p.minute),
+      Number(p.second),
+    );
+  };
+  return new Date(guess.getTime() - (asUtc(guess) - guess.getTime()));
+}
+
+function nextMarqueeKickoffIso() {
+  // Next Sunday 8:20 PM Eastern — the league's marquee slot. Always in the
+  // future so the homepage countdown never sits at zero.
+  const timeZone = "America/New_York";
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    weekday: "short",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  })
+    .formatToParts(now)
+    .reduce<Record<string, string>>((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+  const weekdayOrder = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let daysAhead = (7 - weekdayOrder.indexOf(parts.weekday)) % 7;
+  if (daysAhead === 0 && Number(parts.hour) * 60 + Number(parts.minute) >= 20 * 60 + 20) {
+    daysAhead = 7;
+  }
+  const [year, month, day] = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(now)
+    .split("-")
+    .map(Number);
+  return zonedTimeToUtc(year, month, day + daysAhead, 20, 20, timeZone).toISOString();
+}
+
 const gameDay = {
   status: "NEXT GAME",
   statusTone: "yellow",
-  kickoffLabel: "Tonight, 8:00 PM ET",
-  kickoffIso: "2026-07-08T20:00:00-04:00",
+  kickoffLabel: "Sundays · 8:20 PM ET",
+  kickoffIso: nextMarqueeKickoffIso(),
   streamHref: officialLinks.twitch,
   matchup: {
     away: teams.cowboys,
@@ -574,10 +648,10 @@ export default function Home() {
             <SectionHeader eyebrow="Game Day" title="Matchup Hub" icon={CalendarDays} />
             <div className="max-h-72 space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(0,163,255,0.7)_rgba(255,255,255,0.08)] [scrollbar-width:thin]">
               {schedule.map(([day, home, away, time]) => (
-                <div key={`${home}-${away}`} className="interactive-card grid grid-cols-[3rem_1fr_auto] items-center gap-3 rounded-md border border-white/10 bg-black/35 p-2.5">
-                  <span className="font-[var(--font-oswald)] text-xl font-bold text-electric">{day}</span>
-                  <span className="font-semibold text-white">{home} vs {away}</span>
-                  <span className="text-sm text-chrome-300">{time}</span>
+                <div key={`${home}-${away}`} className="interactive-card grid grid-cols-[6rem_minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-white/10 bg-black/35 p-2.5">
+                  <span className="truncate font-[var(--font-oswald)] text-lg font-bold text-electric">{day}</span>
+                  <span className="min-w-0 truncate font-semibold text-white">{home} vs {away}</span>
+                  <span className="shrink-0 text-sm text-chrome-300">{time}</span>
                 </div>
               ))}
             </div>

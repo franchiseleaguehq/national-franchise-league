@@ -106,24 +106,24 @@ export default function SchedulePage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
-                      <div className="grid gap-2 sm:grid-cols-3">
-                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
+                    <div className="mt-4 grid gap-3">
+                      <div className="grid min-w-0 gap-2 sm:grid-cols-3">
+                        <label className="grid min-w-0 gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
                           Status
-                          <select defaultValue={game.statusLabel} className="min-h-11 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric">
+                          <select defaultValue={game.statusLabel} className="min-h-11 w-full min-w-0 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric">
                             {statuses.map((status) => <option key={status}>{status}</option>)}
                           </select>
                         </label>
-                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
+                        <label className="grid min-w-0 gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
                           Away Score
-                          <input type="number" min="0" defaultValue={game.awayScore ?? ""} className="min-h-11 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric" />
+                          <input type="number" min="0" defaultValue={game.awayScore ?? ""} className="min-h-11 w-full min-w-0 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric" />
                         </label>
-                        <label className="grid gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
+                        <label className="grid min-w-0 gap-1 text-xs font-bold uppercase tracking-[0.14em] text-chrome-400">
                           Home Score
-                          <input type="number" min="0" defaultValue={game.homeScore ?? ""} className="min-h-11 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric" />
+                          <input type="number" min="0" defaultValue={game.homeScore ?? ""} className="min-h-11 w-full min-w-0 rounded-md border border-white/10 bg-black px-3 text-sm font-bold text-white outline-none focus:border-electric" />
                         </label>
                       </div>
-                      <p className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/10 bg-black/35 px-3 text-xs font-bold uppercase tracking-[0.12em] text-chrome-300">
+                      <p className="inline-flex min-h-11 w-fit items-center gap-2 rounded-md border border-white/10 bg-black/35 px-3 text-xs font-bold uppercase tracking-[0.12em] text-chrome-300">
                         <Edit3 className="size-4 text-electric" />
                         Commissioner editable
                       </p>

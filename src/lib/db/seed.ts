@@ -89,7 +89,7 @@ export const db: DatabaseSnapshot = {
     { id: "trade_1", leagueId: "league_nfl", fromTeamId: "dal", toTeamId: "was", summary: "Dallas submitted a 2027 2nd-round pick package for secondary help.", status: "pending", submittedAt: "2026-07-06T12:00:00-04:00" },
   ],
   announcements: [
-    { id: "ann_1", leagueId: "league_nfl", title: "Week 1 advance", body: "Advance window closes Wednesday at 9 PM ET.", createdAt: "2026-07-06T09:00:00-04:00" },
+    { id: "ann_1", leagueId: "league_nfl", title: "League advances", body: "Advances run every Sunday, Wednesday, and Friday, 5–6 PM ET. If all games are played early, we advance early.", createdAt: "2026-07-06T09:00:00-04:00" },
     { id: "ann_2", leagueId: "league_nfl", title: "Trade approvals", body: "Both owners must confirm accepted trades in Discord before committee review.", createdAt: "2026-07-06T10:00:00-04:00" },
   ],
   rules: [

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Radio } from "lucide-react";
+import { useState } from "react";
+import { Menu, Radio, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { mainNavigationItems } from "@/lib/navigation";
@@ -12,6 +13,7 @@ const twitchHref = "https://www.twitch.tv/nationalfranchiseleague";
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
   if (pathname.startsWith("/commissioner")) return null;
 
   return (
@@ -44,13 +46,42 @@ export function PublicHeader() {
           ))}
         </div>
 
-        <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
-          <Link href={twitchHref} target="_blank" rel="noreferrer">
-            <Radio className="size-4" />
-            Live
-          </Link>
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button asChild variant="electric" size="sm" className="hidden sm:inline-flex">
+            <Link href={twitchHref} target="_blank" rel="noreferrer">
+              <Radio className="size-4" />
+              Live
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="inline-flex xl:hidden"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </Button>
+        </div>
       </div>
+
+      {menuOpen && (
+        <div className="border-t border-white/10 bg-black/85 backdrop-blur-2xl xl:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col px-5 py-3 md:px-8">
+            {mainNavigationItems.map((item) => (
+              <Link
+                href={item.href}
+                key={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="border-b border-white/5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-chrome-200 transition last:border-0 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
