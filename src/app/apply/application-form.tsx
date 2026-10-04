@@ -11,7 +11,7 @@ type ApplicationTeam = {
   isOpen: boolean;
 };
 
-function Field({ label, name, type = "text", required = true, placeholder }: { label: string; name: string; type?: string; required?: boolean; placeholder?: string }) {
+function Field({ label, name, type = "text", required = true, placeholder, hint }: { label: string; name: string; type?: string; required?: boolean; placeholder?: string; hint?: string }) {
   return (
     <label className="grid gap-2 text-sm font-bold text-chrome-200">
       {label}
@@ -22,6 +22,7 @@ function Field({ label, name, type = "text", required = true, placeholder }: { l
         placeholder={placeholder}
         className="min-h-12 rounded-md border border-white/10 bg-white/[0.06] px-4 text-base text-white outline-none transition placeholder:text-chrome-500 focus:border-electric"
       />
+      {hint ? <span className="text-xs font-normal leading-5 text-chrome-400">{hint}</span> : null}
     </label>
   );
 }
@@ -88,7 +89,7 @@ export function ApplicationForm({ teams }: { teams: ApplicationTeam[] }) {
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="Full name" name="fullName" placeholder="Your full name" />
         <Field label="Preferred display name" name="preferredDisplayName" placeholder="Name shown on your public owner profile" />
-        <Field label="Gamertag" name="gamertag" placeholder="PSN / Madden name" />
+        <Field label="PSN name" name="gamertag" placeholder="Exact PlayStation Network name" hint="Must match your PSN/Madden name exactly — this links your stats and legacy to your profile." />
         <Field label="Email" name="email" type="email" placeholder="name@example.com" />
         <Field label="Phone number optional" name="phone" type="tel" required={false} placeholder="Optional" />
         <Field label="Time zone" name="timezone" placeholder="Eastern, Central, Pacific..." />

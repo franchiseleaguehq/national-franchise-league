@@ -38,7 +38,7 @@ export default async function CommissionerDashboardPage() {
   const setup = await getCommissionerSetup();
   if (!setup || setup.account.ownerId !== session.ownerId) redirect("/commissioner/login");
 
-  const data = getCommissionerDashboardData();
+  const data = await getCommissionerDashboardData();
   const editableLeagueData = getCommissionerEditableLeagueData();
   const lotteryData = getTeamLotteryData();
   const formerOwner = data.owners.find((owner) => owner.status === "former");

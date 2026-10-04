@@ -1,5 +1,5 @@
 import { db } from "./seed";
-import { listRuntimeApplications } from "./applications";
+import { listRuntimeApplications, listStoredApplications } from "./applications";
 import { getCommissionerSetupSync } from "./commissioner-store";
 import { leagueFeatures } from "@/lib/features";
 import type { ApplicationStatus, GameRecord, OwnerLeagueStatus, OwnerRecord, TeamRecord } from "./schema";
@@ -174,9 +174,14 @@ export function getHomeData() {
   };
 }
 
-export function getCommissionerDashboardData() {
+export async function getCommissionerDashboardData() {
   const league = getLeague();
-  const applications = [...listRuntimeApplications(), ...db.applications.filter((application) => application.leagueId === league.id)];
+  const seenApplicationIds = new Set<string>();
+  const applications = [...listRuntimeApplications(), ...(await listStoredApplications()), ...db.applications.filter((application) => application.leagueId === league.id)].filter((application) => {
+    if (seenApplicationIds.has(application.id)) return false;
+    seenApplicationIds.add(application.id);
+    return true;
+  });
   const owners = leagueOwners().filter((owner) => owner.leagueId === league.id);
   const teams = leagueTeams().filter((team) => team.leagueId === league.id);
   const unassignedOwners = owners.filter((owner) => !owner.teamId);

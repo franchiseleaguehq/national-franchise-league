@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   }
 
   const league = getLeague();
-  const application = saveOwnerApplication({
+  const application = await saveOwnerApplication({
     id: `application_${Date.now()}`,
     leagueId: league.id,
     fullName: readString(formData, "fullName"),
